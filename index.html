@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • 9:16 Auto Camera & Karaoke</title>
+  <title>n8n Style Workflow Reel • 9:16 Auto Camera & Phind Accent</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -82,28 +82,88 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 14px 38px;
+      padding: 16px 14px 36px;
       pointer-events: none;
       overflow: visible;
     }
 
-    /* উপরের ছোট স্ট্যাটাস পিল */
-    .top-pill {
+    /* উপরের হেডার ও Phind সার্চ কার্ড র‍্যাপার */
+    .top-stack {
       position: relative;
-      z-index: 20;
+      z-index: 24;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ২ সিন পর পর দৃশ্যমান হওয়া টাইটেল পিল */
+    .top-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-size: 12px;
       font-weight: 800;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: #e2e8f0;
-      background: rgba(24, 27, 35, 0.92);
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      padding: 7px 15px;
+      background: rgba(24, 27, 35, 0.94);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      padding: 7px 14px;
       border-radius: 999px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(-10px) scale(0.92);
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      overflow: hidden;
+      transition:
+        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        max-height 0.4s ease,
+        padding 0.4s ease;
+    }
+
+    .top-pill.show-title {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      max-height: 44px;
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+
+    /* টাইটেলের শেষের দুটি ওয়ার্ডে 0.32s ডিলের পর 0.6s জুড়ে #ffd24c হাইলাইট */
+    .title-highlight-words {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      padding: 2px 7px;
+      margin-left: 3px;
+      color: #e2e8f0;
+      transition: color 0.35s ease 0.42s;
+    }
+
+    .title-highlight-words::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: #ffd24c;
+      border-radius: 6px;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: none;
+    }
+
+    .top-pill.show-title .title-highlight-words {
+      color: #090d16;
+    }
+
+    .top-pill.show-title .title-highlight-words::before {
+      transform: scaleX(1);
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.32s;
     }
 
     .live-dot {
@@ -112,6 +172,88 @@
       border-radius: 999px;
       background: #22c55e;
       box-shadow: 0 0 10px #22c55e;
+      flex-shrink: 0;
+    }
+
+    /* Phind-স্টাইল সার্চ বক্স ও রেজাল্ট পপ-আপ */
+    .phind-widget {
+      width: 94%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .phind-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(18, 21, 29, 0.92);
+      border: 1px solid rgba(64, 201, 255, 0.35);
+      border-radius: 12px;
+      padding: 8px 12px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+    }
+
+    .phind-badge {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: #090d16;
+      background: linear-gradient(90deg, #40C9FF, #38bdf8);
+      padding: 2px 7px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .phind-typing-text {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: #facc15;
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: cursorBlink 0.65s steps(1) infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .phind-result-popup {
+      background: rgba(24, 28, 38, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.45);
+      border-left: 3px solid #facc15;
+      border-radius: 10px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #e2e8f0;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+      transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .phind-result-popup.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .phind-result-tag {
+      color: #facc15;
+      font-weight: 800;
+      margin-right: 4px;
     }
 
     /* ক্যামেরা ভিউপোর্ট ও ক্যানভাস রিগ */
@@ -407,7 +549,7 @@
       font-weight: 700;
     }
 
-    /* নিচে সম্পূর্ণ দৃশ্যমান কারাওকে ক্যাপশন বক্স */
+    /* নিচে সম্পূর্ণ দৃশ্যমান কারাওকে ক্যাপশন + হলুদ হাইলাইট বার অ্যাকসেন্ট */
     .karaoke-box {
       position: relative;
       z-index: 25;
@@ -436,19 +578,56 @@
     }
 
     .k-word {
+      position: relative;
+      z-index: 1;
       color: #ffffff;
-      padding: 4px 8px;
-      border-radius: 6px;
+      padding: 4px 9px;
+      border-radius: 7px;
       background: rgba(11, 13, 19, 0.78);
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
-      transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+      overflow: hidden;
+      transition: color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    /* মূল শব্দের পেছনে/নিচে হলুদ হাইলাইট বার */
+    .k-word::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: #facc15;
+      border-radius: 7px;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .k-word::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      bottom: 2px;
+      height: 3px;
+      border-radius: 99px;
+      background: #fde047;
+      opacity: 0;
+      transition: opacity 0.18s ease;
     }
 
     .k-word.active {
-      background: #facc15;
       color: #090d16;
       text-shadow: none;
-      transform: scale(1.05);
+      transform: scale(1.07);
+      box-shadow: 0 4px 16px rgba(250, 204, 21, 0.45);
+    }
+
+    .k-word.active::before {
+      transform: scaleX(1);
+    }
+
+    .k-word.active::after {
+      opacity: 1;
     }
 
     .pause-pill {
@@ -480,9 +659,26 @@
   <div class="pause-pill" id="pausePill">PAUSED • ট্যাপ করে চালান</div>
 
   <div class="stage-9x16">
-    <div class="top-pill">
-      <span class="live-dot"></span>
-      <span>n8n AI Lead Automation</span>
+    <div class="top-stack">
+      <!-- ২ সিন পর পর দৃশ্যমান হওয়া টাইটেল + শেষের দুই ওয়ার্ডে #ffd24c হাইলাইট -->
+      <div class="top-pill show-title" id="topTitlePill">
+        <span class="live-dot"></span>
+        <span>n8n AI <span class="title-highlight-words">Lead Automation</span></span>
+      </div>
+
+      <!-- Phind-স্টাইল সার্চ বক্স, টাইপিং কার্সর ও রেজাল্ট পপ-আপ -->
+      <div class="phind-widget">
+        <div class="phind-search-bar">
+          <span class="phind-badge">Phind</span>
+          <div class="phind-typing-text">
+            <span id="phindQueryText"></span><span class="typing-cursor"></span>
+          </div>
+        </div>
+        <div class="phind-result-popup" id="phindResultPopup">
+          <span class="phind-result-tag">✓ AI Answer:</span>
+          <span id="phindResultText"></span>
+        </div>
+      </div>
     </div>
 
     <div class="camera-viewport" id="cameraViewport">
@@ -641,6 +837,10 @@
     const viewport = document.getElementById("cameraViewport");
     const canvas = document.getElementById("n8nCanvas");
     const sceneAmbientBg = document.getElementById("sceneAmbientBg");
+    const topTitlePill = document.getElementById("topTitlePill");
+    const phindQueryText = document.getElementById("phindQueryText");
+    const phindResultPopup = document.getElementById("phindResultPopup");
+    const phindResultText = document.getElementById("phindResultText");
     const wiresLayer = document.getElementById("wiresLayer");
     const pulsesLayer = document.getElementById("pulsesLayer");
     const karaokeLine = document.getElementById("karaokeLine");
@@ -688,7 +888,7 @@
       } catch (_) {}
     }
 
-    /* প্রতিটি সিন ঠিক ৩ সেকেন্ড (3000ms) পর পর পরিবর্তন হবে */
+    /* প্রতিটি সিন ৩ সেকেন্ড (3000ms) + Phind টাইপিং ও রেজাল্ট পপ-আপ ডেটা */
     const steps = [
       {
         focusX: 115,
@@ -699,6 +899,8 @@
         bgPos1: "28% 28%",
         bgColor2: "rgba(64, 201, 255, 0.16)",
         bgPos2: "64% 56%",
+        phindQuery: "লিড ফর্ম সাবমিট হলে কী হবে?",
+        phindResult: "Webhook সাথে সাথে ওয়ার্কফ্লো ট্রিগার করবে",
         words: ["ফর্ম", "আসলেই", "অটোমেশন", "শুরু", "হয়।"]
       },
       {
@@ -710,6 +912,8 @@
         bgPos1: "35% 32%",
         bgColor2: "rgba(129, 140, 248, 0.16)",
         bgPos2: "65% 58%",
+        phindQuery: "কীভাবে সঠিক ক্লায়েন্ট বাছাই হবে?",
+        phindResult: "Intent Filter আসল লিড আলাদা করবে",
         words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে।"]
       },
       {
@@ -721,6 +925,8 @@
         bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)",
         bgPos2: "62% 55%",
+        phindQuery: "ক্লায়েন্টকে উত্তর দেবে কে?",
+        phindResult: "AI Agent + Memory স্মার্ট রিপ্লাই তৈরি করবে",
         words: ["AI", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়।"]
       },
       {
@@ -732,6 +938,8 @@
         bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)",
         bgPos2: "66% 56%",
+        phindQuery: "লিডের তথ্য কোথায় জমা থাকবে?",
+        phindResult: "Google Sheets-এ অটোমেটিক নতুন রো যুক্ত হবে",
         words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়।"]
       },
       {
@@ -743,6 +951,8 @@
         bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)",
         bgPos2: "66% 56%",
+        phindQuery: "n8n AI Lead Automation স্ট্যাটাস?",
+        phindResult: "১০০% অটোমেটেড লিড ফ্লো এখন সক্রিয়!",
         words: ["পুরো", "n8n", "ফ্লো", "একদম", "রেডি!"]
       }
     ];
@@ -845,6 +1055,18 @@
         hasInitialRendered = true;
       }
 
+      /* ২ সিন পর পর টাইটেলটি স্ক্রিনে দেখানো (সিন ০, ২, ৪) ও হাইলাইট অ্যানিমেশন রিস্টার্ট */
+      topTitlePill.classList.remove("show-title");
+      if (currentStep % 2 === 0) {
+        void topTitlePill.offsetWidth;
+        topTitlePill.classList.add("show-title");
+      }
+
+      /* Phind সার্চ বক্স রিসেট ও রেজাল্ট পপ-আপ প্রস্তুত */
+      phindQueryText.textContent = "";
+      phindResultText.textContent = stepObj.phindResult;
+      phindResultPopup.classList.remove("visible");
+
       applySceneBackground(stepObj);
 
       mainNodes.forEach((node, i) => {
@@ -896,6 +1118,18 @@
           setStep((currentStep + 1) % steps.length);
         } else {
           const progress = elapsed / stepObj.duration;
+
+          /* Phind সার্চ বক্সে টাইপিং অ্যানিমেশন (প্রথম ৪০% সময়ে টাইপ শেষ হবে) */
+          const typingProgress = Math.min(1, progress / 0.4);
+          const charCount = Math.floor(typingProgress * stepObj.phindQuery.length);
+          phindQueryText.textContent = stepObj.phindQuery.slice(0, charCount);
+
+          /* টাইপিং শেষ হলেই Phind রেজাল্ট পপ-আপ প্রদর্শন */
+          if (progress >= 0.42) {
+            phindResultPopup.classList.add("visible");
+          }
+
+          /* মূল শব্দের পেছনে হলুদ হাইলাইট বার অ্যাকসেন্ট */
           const activeWord = Math.min(
             wordEls.length - 1,
             Math.floor(progress * wordEls.length)
