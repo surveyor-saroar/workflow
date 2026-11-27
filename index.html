@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Normal Voice From Start</title>
+  <title>n8n Style Workflow Reel • Voice Auto-Synced</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -1164,6 +1164,7 @@
     const voiceAudio = document.getElementById("voiceAudio");
     voiceAudio.volume = 1.0;
     voiceAudio.playbackRate = 1.0;
+    voiceAudio.loop = true;
 
     const viewport = document.getElementById("cameraViewport");
     const canvas = document.getElementById("n8nCanvas");
@@ -1203,8 +1204,122 @@
     let audioUnlocked = false;
     let audioCtx = null;
     let hasInitialRendered = false;
+    let fallbackAudioSec = 0;
 
-    function unlockAndPlayVoice(fromStart = false) {
+    // আনুপাতিক টাইমলাইন (মোট 1.00 = Voice.aac এর মোট দৈর্ঘ্য)
+    const steps = [
+      {
+        startRatio: 0.00, endRatio: 0.17,
+        focusX: 115, focusY: 165, zoom: 1.18, barGroup: 0,
+        bgColor1: "rgba(251, 146, 60, 0.17)", bgPos1: "28% 28%",
+        bgColor2: "rgba(64, 201, 255, 0.16)", bgPos2: "64% 56%",
+        saroarQuery: "ফর্ম সাবমিট হলে কী হবে?",
+        saroarResult: "ফর্ম সাবমিট করলেই অটোমেশন শুরু",
+        words: ["ফর্ম", "সাবমিট", "করলেই", "অটোমেশন", "শুরু"],
+        weights: [0.16, 0.20, 0.22, 0.24, 0.18]
+      },
+      {
+        startRatio: 0.17, endRatio: 0.34,
+        focusX: 295, focusY: 165, zoom: 1.18, barGroup: 0,
+        bgColor1: "rgba(56, 189, 248, 0.18)", bgPos1: "35% 32%",
+        bgColor2: "rgba(129, 140, 248, 0.16)", bgPos2: "65% 58%",
+        saroarQuery: "ফিল্টার কীভাবে কাজ করে?",
+        saroarResult: "ফিল্টার সঠিক ক্লায়েন্ট আলাদা করে",
+        words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে"],
+        weights: [0.20, 0.18, 0.24, 0.22, 0.16]
+      },
+      {
+        startRatio: 0.34, endRatio: 0.52,
+        focusX: 545, focusY: 225, zoom: 1.05, barGroup: 1,
+        bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
+        bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
+        saroarQuery: "উত্তর কীভাবে তৈরি হয়?",
+        saroarResult: "এবং এআই এজেন্ট স্মার্ট উত্তর বানায়",
+        words: ["এবং", "এআই", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়"],
+        weights: [0.13, 0.15, 0.19, 0.17, 0.17, 0.19]
+      },
+      {
+        startRatio: 0.52, endRatio: 0.68,
+        focusX: 790, focusY: 215, zoom: 1.08, barGroup: 1,
+        bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
+        bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
+        saroarQuery: "ডেটা কোথায় সেভ হয়?",
+        saroarResult: "গুগল শিটে ডেটা সেভ হয়",
+        words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়"],
+        weights: [0.20, 0.20, 0.20, 0.22, 0.18]
+      },
+      {
+        startRatio: 0.68, endRatio: 0.83,
+        focusX: 465, focusY: 210, zoom: 0.56, barGroup: 1,
+        bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
+        bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
+        saroarQuery: "n8n ফ্লো স্ট্যাটাস কী?",
+        saroarResult: "পুরো এন এইট এন ফ্লো একদম রেডি",
+        words: ["পুরো", "এন", "এইট", "এন", "ফ্লো", "একদম", "রেডি"],
+        weights: [0.14, 0.12, 0.13, 0.12, 0.15, 0.17, 0.17]
+      },
+      {
+        isIntroScene: true,
+        startRatio: 0.83, endRatio: 1.00,
+        focusX: 465, focusY: 210, zoom: 0.56, barGroup: 2,
+        bgColor1: "rgba(24, 119, 242, 0.22)", bgPos1: "25% 30%",
+        bgColor2: "rgba(250, 204, 21, 0.18)", bgPos2: "72% 60%",
+        saroarQuery: "ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন",
+        saroarResult: "পেজটি ফলো দিয়ে সঙ্গে থাকুন!",
+        words: ["পেজটি", "ফলো", "দিয়ে", "সঙ্গে", "থাকুন"],
+        weights: [0.20, 0.18, 0.18, 0.20, 0.24]
+      }
+    ];
+
+    function getTotalVoiceDuration() {
+      if (Number.isFinite(voiceAudio.duration) && voiceAudio.duration > 0) {
+        return voiceAudio.duration;
+      }
+      return 12.0;
+    }
+
+    function getCurrentVoiceTime(dtSec) {
+      if (!voiceAudio.paused && !voiceAudio.ended && Number.isFinite(voiceAudio.currentTime)) {
+        fallbackAudioSec = voiceAudio.currentTime;
+        return voiceAudio.currentTime;
+      }
+      if (!isPaused && !audioUnlocked) {
+        const dur = getTotalVoiceDuration();
+        fallbackAudioSec = (fallbackAudioSec + dtSec) % dur;
+        return fallbackAudioSec;
+      }
+      return Number.isFinite(voiceAudio.currentTime) ? voiceAudio.currentTime : fallbackAudioSec;
+    }
+
+    function resolveStepFromTime(currentSec) {
+      const dur = getTotalVoiceDuration();
+      const clampedSec = Math.max(0, Math.min(currentSec, Math.max(0.001, dur - 0.0001)));
+      const ratio = clampedSec / dur;
+
+      for (let i = 0; i < steps.length; i++) {
+        const s = steps[i];
+        const isLast = i === steps.length - 1;
+        if (ratio >= s.startRatio && (ratio < s.endRatio || isLast)) {
+          const span = Math.max(0.0001, s.endRatio - s.startRatio);
+          const stepProgress = Math.max(0, Math.min(1, (ratio - s.startRatio) / span));
+          const stepDurationMs = span * dur * 1000;
+          const stepElapsedMs = stepProgress * stepDurationMs;
+          return {
+            stepIndex: i,
+            stepProgress,
+            stepElapsedMs
+          };
+        }
+      }
+
+      return {
+        stepIndex: steps.length - 1,
+        stepProgress: 1,
+        stepElapsedMs: 0
+      };
+    }
+
+    function unlockAndPlayVoice(resetToZero = false) {
       if (!audioCtx) {
         const AC = window.AudioContext || window.webkitAudioContext;
         if (AC) audioCtx = new AC();
@@ -1222,8 +1337,9 @@
       if (!isPaused) {
         try {
           voiceAudio.playbackRate = 1.0;
-          if (fromStart) {
+          if (resetToZero) {
             voiceAudio.currentTime = 0;
+            fallbackAudioSec = 0;
           }
           const p = voiceAudio.play();
           if (p && typeof p.catch === "function") p.catch(() => {});
@@ -1272,64 +1388,6 @@
       osc.stop(now + 0.1);
     }
 
-    const steps = [
-      {
-        focusX: 115, focusY: 165, zoom: 1.18, duration: 2050, barGroup: 0,
-        bgColor1: "rgba(251, 146, 60, 0.17)", bgPos1: "28% 28%",
-        bgColor2: "rgba(64, 201, 255, 0.16)", bgPos2: "64% 56%",
-        saroarQuery: "ফর্ম সাবমিট হলে কী হবে?",
-        saroarResult: "ফর্ম সাবমিট করলেই অটোমেশন শুরু",
-        words: ["ফর্ম", "সাবমিট", "করলেই", "অটোমেশন", "শুরু"],
-        weights: [0.16, 0.20, 0.22, 0.24, 0.18]
-      },
-      {
-        focusX: 295, focusY: 165, zoom: 1.18, duration: 1950, barGroup: 0,
-        bgColor1: "rgba(56, 189, 248, 0.18)", bgPos1: "35% 32%",
-        bgColor2: "rgba(129, 140, 248, 0.16)", bgPos2: "65% 58%",
-        saroarQuery: "ফিল্টার কীভাবে কাজ করে?",
-        saroarResult: "ফিল্টার সঠিক ক্লায়েন্ট আলাদা করে",
-        words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে"],
-        weights: [0.20, 0.18, 0.24, 0.22, 0.16]
-      },
-      {
-        focusX: 545, focusY: 225, zoom: 1.05, duration: 2100, barGroup: 1,
-        bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
-        bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
-        saroarQuery: "উত্তর কীভাবে তৈরি হয়?",
-        saroarResult: "এবং এআই এজেন্ট স্মার্ট উত্তর বানায়",
-        words: ["এবং", "এআই", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়"],
-        weights: [0.13, 0.15, 0.19, 0.17, 0.17, 0.19]
-      },
-      {
-        focusX: 790, focusY: 215, zoom: 1.08, duration: 1750, barGroup: 1,
-        bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
-        bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
-        saroarQuery: "ডেটা কোথায় সেভ হয়?",
-        saroarResult: "গুগল শিটে ডেটা সেভ হয়",
-        words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়"],
-        weights: [0.20, 0.20, 0.20, 0.22, 0.18]
-      },
-      {
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 1950, barGroup: 1,
-        bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
-        bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
-        saroarQuery: "n8n ফ্লো স্ট্যাটাস কী?",
-        saroarResult: "পুরো এন এইট এন ফ্লো একদম রেডি",
-        words: ["পুরো", "এন", "এইট", "এন", "ফ্লো", "একদম", "রেডি"],
-        weights: [0.14, 0.12, 0.13, 0.12, 0.15, 0.17, 0.17]
-      },
-      {
-        isIntroScene: true,
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 2200, barGroup: 2,
-        bgColor1: "rgba(24, 119, 242, 0.22)", bgPos1: "25% 30%",
-        bgColor2: "rgba(250, 204, 21, 0.18)", bgPos2: "72% 60%",
-        saroarQuery: "ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন",
-        saroarResult: "পেজটি ফলো দিয়ে সঙ্গে থাকুন!",
-        words: ["পেজটি", "ফলো", "দিয়ে", "সঙ্গে", "থাকুন"],
-        weights: [0.20, 0.18, 0.18, 0.20, 0.24]
-      }
-    ];
-
     function getWeightedWordIndex(progress, weights) {
       if (!weights || !weights.length) return 0;
       const total = weights.reduce((a, b) => a + b, 0);
@@ -1375,7 +1433,6 @@
     let pulses = [];
     let isPaused = false;
     let currentStep = 0;
-    let elapsed = 0;
     let lastTick = performance.now();
     let wordEls = [];
     let leadIdx = 0;
@@ -1464,13 +1521,6 @@
 
       if (hasInitialRendered) {
         playTransitionSound();
-        if (currentStep === 0 && audioUnlocked && !isPaused) {
-          try {
-            voiceAudio.playbackRate = 1.0;
-            voiceAudio.currentTime = 0;
-            voiceAudio.play().catch(() => {});
-          } catch (_) {}
-        }
       } else {
         hasInitialRendered = true;
       }
@@ -1534,51 +1584,55 @@
       });
     }
 
+    function syncVisualsToProgress(stepObj, progress, elapsedMs) {
+      const typingProgress = Math.min(1, progress / 0.36);
+      const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
+      saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
+
+      if (progress >= 0.38) {
+        saroarResultPopup.classList.add("visible");
+      } else {
+        saroarResultPopup.classList.remove("visible");
+      }
+
+      if (stepObj.isIntroScene) {
+        if (!bellClickedOnce && elapsedMs >= 520) {
+          bellClickedOnce = true;
+          playClickSound(820);
+          document.getElementById("s6BellRipple").classList.add("fire");
+          document.getElementById("s6BellView").classList.add("hide");
+          document.getElementById("s6FollowBtn").classList.add("show");
+        }
+        if (!shareClickedTwice && elapsedMs >= 1220) {
+          shareClickedTwice = true;
+          playClickSound(640);
+          document.getElementById("s6ShareRipple").classList.add("fire");
+          document.getElementById("s6ShareCard").classList.add("share-active");
+          document.getElementById("s6ShareSub").textContent = "শেয়ার সম্পন্ন ✓";
+        }
+      }
+
+      const activeWord = getWeightedWordIndex(progress, stepObj.weights);
+      wordEls.forEach((el, i) => {
+        el.classList.toggle("active", i === activeWord);
+      });
+    }
+
     function animate(now) {
       const rawDt = now - lastTick;
       const dt = Math.min(Math.max(rawDt, 0), 100);
       lastTick = now;
 
       if (!isPaused) {
-        elapsed += dt;
-        const stepObj = steps[currentStep];
+        const currentSec = getCurrentVoiceTime(dt / 1000);
+        const resolved = resolveStepFromTime(currentSec);
 
-        if (elapsed >= stepObj.duration) {
-          elapsed = 0;
-          setStep((currentStep + 1) % steps.length);
-        } else {
-          const progress = elapsed / stepObj.duration;
-
-          const typingProgress = Math.min(1, progress / 0.36);
-          const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
-          saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
-
-          if (progress >= 0.38) {
-            saroarResultPopup.classList.add("visible");
-          }
-
-          if (stepObj.isIntroScene) {
-            if (!bellClickedOnce && elapsed >= 520) {
-              bellClickedOnce = true;
-              playClickSound(820);
-              document.getElementById("s6BellRipple").classList.add("fire");
-              document.getElementById("s6BellView").classList.add("hide");
-              document.getElementById("s6FollowBtn").classList.add("show");
-            }
-            if (!shareClickedTwice && elapsed >= 1220) {
-              shareClickedTwice = true;
-              playClickSound(640);
-              document.getElementById("s6ShareRipple").classList.add("fire");
-              document.getElementById("s6ShareCard").classList.add("share-active");
-              document.getElementById("s6ShareSub").textContent = "শেয়ার সম্পন্ন ✓";
-            }
-          }
-
-          const activeWord = getWeightedWordIndex(progress, stepObj.weights);
-          wordEls.forEach((el, i) => {
-            el.classList.toggle("active", i === activeWord);
-          });
+        if (resolved.stepIndex !== currentStep) {
+          setStep(resolved.stepIndex);
         }
+
+        const stepObj = steps[currentStep];
+        syncVisualsToProgress(stepObj, resolved.stepProgress, resolved.stepElapsedMs);
 
         for (const p of pulses) {
           const w = wiresData[p.wireIdx];
@@ -1605,11 +1659,21 @@
         whooshAudio.pause();
         voiceAudio.pause();
       } else {
-        const shouldResetToStart = !audioUnlocked || (currentStep === 0 && elapsed < 100);
-        unlockAndPlayVoice(shouldResetToStart);
+        unlockAndPlayVoice(!audioUnlocked);
         playTransitionSound();
       }
     }
+
+    voiceAudio.addEventListener("loadedmetadata", () => {
+      const resolved = resolveStepFromTime(voiceAudio.currentTime || 0);
+      setStep(resolved.stepIndex);
+    });
+
+    voiceAudio.addEventListener("seeked", () => {
+      const resolved = resolveStepFromTime(voiceAudio.currentTime || 0);
+      setStep(resolved.stepIndex);
+      syncVisualsToProgress(steps[currentStep], resolved.stepProgress, resolved.stepElapsedMs);
+    });
 
     window.addEventListener("pointerdown", togglePause);
     window.addEventListener("resize", () => moveCameraToStep(steps[currentStep]));
