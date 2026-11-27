@@ -625,13 +625,12 @@
       document.getElementById("sub-1")
     ];
 
-    /* সাউন্ড সেটআপ (সিন ট্রানজিশন + শব্দ পরিবর্তনের সূক্ষ্ম অ্যাডজাস্টমেন্ট) */
+    /* প্রতিটি সিনের মাঝামাঝিতে মাত্র একবার whoosh sound */
     const whooshAudio = new Audio("whoosh.mp3.wav");
     whooshAudio.preload = "auto";
-    whooshAudio.volume = 0.65;
+    whooshAudio.volume = 0.72;
     let audioUnlocked = false;
-    let hasInitialRendered = false;
-    let lastHighlightedWordIdx = -1;
+    let midWhooshPlayed = false;
 
     function unlockSoundSystem() {
       if (audioUnlocked) return;
@@ -642,13 +641,14 @@
       }).catch(() => {});
     }
 
-    function playTransitionSound(vol = 0.65, rate = 1.0) {
-      if (isPaused || !audioUnlocked) return;
+    function playMidSceneWhoosh() {
+      if (isPaused || !audioUnlocked || midWhooshPlayed) return;
+      midWhooshPlayed = true;
       try {
         whooshAudio.pause();
         whooshAudio.currentTime = 0;
-        whooshAudio.volume = vol;
-        whooshAudio.playbackRate = rate;
+        whooshAudio.volume = 0.72;
+        whooshAudio.playbackRate = 1.0;
         const p = whooshAudio.play();
         if (p && typeof p.catch === "function") {
           p.catch(() => {});
@@ -776,15 +776,9 @@
 
     function setStep(idx) {
       currentStep = idx;
-      lastHighlightedWordIdx = -1;
+      midWhooshPlayed = false;
       const stepObj = steps[currentStep];
       const activeNodeIdx = Math.min(currentStep, mainNodes.length - 1);
-
-      if (hasInitialRendered) {
-        playTransitionSound(0.65, 1.0);
-      } else {
-        hasInitialRendered = true;
-      }
 
       mainNodes.forEach((node, i) => {
         if (currentStep === 4) {
@@ -830,6 +824,10 @@
         elapsed += dt;
         const stepObj = steps[currentStep];
 
+        if (elapsed >= stepObj.duration * 0.5 && !midWhooshPlayed) {
+          playMidSceneWhoosh();
+        }
+
         if (elapsed >= stepObj.duration) {
           elapsed = 0;
           setStep((currentStep + 1) % steps.length);
@@ -839,13 +837,6 @@
             wordEls.length - 1,
             Math.floor(progress * wordEls.length)
           );
-
-          if (activeWord !== lastHighlightedWordIdx) {
-            lastHighlightedWordIdx = activeWord;
-            if (activeWord > 0) {
-              playTransitionSound(0.18, 1.25);
-            }
-          }
 
           wordEls.forEach((el, i) => {
             el.classList.toggle("active", i === activeWord);
@@ -874,8 +865,6 @@
       pausePill.classList.toggle("visible", isPaused);
       if (isPaused) {
         whooshAudio.pause();
-      } else {
-        playTransitionSound(0.65, 1.0);
       }
     }
 
