@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>9:16 Workflow Reel • Cyan-Magenta Gradient</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(64, 201, 255, 0.24), transparent 48%),
+        radial-gradient(circle at 82% 78%, rgba(232, 28, 255, 0.24), transparent 52%),
+        linear-gradient(135deg, #071320 0%, #090d1a 50%, #170822 100%);
+    }
+
+    /* বর্ডার ছাড়া 9:16 রিল স্টেজ (Flexbox Centering) */
+    .reel-stage {
+      position: relative;
+      height: 100vh;
+      width: calc(100vh * 9 / 16);
+      max-width: 100vw;
+      max-height: calc(100vw * 16 / 9);
+      z-index: 5;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 26px;
+      padding: 6% 6% 8%;
+      pointer-events: none;
+    }
+
+    /* সিন তথ্য ডিসপ্লে */
+    .scene-display {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .scene-badge {
+      font-size: clamp(11px, 1.5vh, 13px);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #090d16;
+      background: linear-gradient(90deg, #40C9FF, #E81CFF);
+      padding: 6px 16px;
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(64, 201, 255, 0.22);
+    }
+
+    .scene-card {
+      position: relative;
+      width: 100%;
+      background: rgba(9, 13, 26, 0.44);
+      backdrop-filter: blur(8px);
+      border-radius: 22px;
+      padding: 24px 18px;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .scene-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #40C9FF, #E81CFF);
+    }
+
+    .scene-card.pop-in {
+      animation: cardPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes cardPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.88) translateY(14px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .scene-title {
+      font-size: clamp(21px, 3vh, 28px);
+      font-weight: 800;
+      line-height: 1.3;
+      background: linear-gradient(90deg, #40C9FF, #E81CFF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.65));
+      margin-bottom: 8px;
+    }
+
+    .scene-desc {
+      font-size: clamp(13px, 1.9vh, 16px);
+      color: #e2e8f0;
+      line-height: 1.5;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+    }
+
+    /* স্বচ্ছ কারাওকে ক্যাপশন ও সলিড হলুদ হাইলাইট */
+    .karaoke-box {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: transparent;
+      padding: 6px 4px;
+    }
+
+    .karaoke-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 6px 8px;
+      font-size: clamp(17px, 2.5vh, 23px);
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .k-word {
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(7, 11, 20, 0.42);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+      transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+    }
+
+    .k-word.active {
+      background: #facc15;
+      color: #090d16;
+      text-shadow: none;
+      transform: scale(1.06);
+    }
+
+    /* পজ অবস্থার নির্দেশক */
+    .pause-indicator {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 10;
+      font-size: 12px;
+      font-weight: 700;
+      color: #090d16;
+      background: linear-gradient(90deg, #40C9FF, #E81CFF);
+      padding: 6px 14px;
+      border-radius: 999px;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+    }
+
+    .pause-indicator.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="pause-indicator" id="pauseIndicator">PAUSED • ট্যাপ করে চালান</div>
+
+  <div class="reel-stage" id="reelStage">
+    <div class="scene-display">
+      <div class="scene-badge" id="sceneBadge">SCENE 01</div>
+      <div class="scene-card" id="sceneCard">
+        <div class="scene-title" id="sceneTitle">প্রথম ধাপ: তথ্য শুরু</div>
+        <div class="scene-desc" id="sceneDesc">সায়ান থেকে ম্যাজেন্টা গ্রেডিয়েন্ট রিল স্টেজ</div>
+      </div>
+    </div>
+
+    <div class="karaoke-box">
+      <div class="karaoke-line" id="karaokeLine"></div>
+    </div>
+  </div>
+
+  <script>
+    const scenes = [
+      {
+        badge: "SCENE 01",
+        title: "প্রথম ধাপ: তথ্য শুরু",
+        desc: "সায়ান থেকে ম্যাজেন্টা গ্রেডিয়েন্ট রিল স্টেজ",
+        duration: 4200,
+        words: ["আমাদের", "নতুন", "রিল", "এপিসোড", "এখন", "শুরু", "হচ্ছে।"]
+      },
+      {
+        badge: "SCENE 02",
+        title: "দ্বিতীয় ধাপ: মূল বিষয়বস্তু",
+        desc: "কেন্দ্রবিন্দুতে স্পষ্ট ও পরিচ্ছন্ন উপস্থাপনা",
+        duration: 4400,
+        words: ["প্রতিটি", "শব্দ", "হলুদ", "হাইলাইটে", "ক্রমান্বয়ে", "ফুটে", "উঠছে।"]
+      },
+      {
+        badge: "SCENE 03",
+        title: "তৃতীয় ধাপ: সমাপ্তি",
+        desc: "সম্পূর্ণ নিঃশব্দ ও টাচ-কন্ট্রোলড প্রিভিউ",
+        duration: 4400,
+        words: ["স্ক্রিনে", "টাচ", "করলেই", "সহজে", "পজ", "ও", "প্লে", "করা", "যায়।"]
+      }
+    ];
+
+    const sceneBadge = document.getElementById("sceneBadge");
+    const sceneCard = document.getElementById("sceneCard");
+    const sceneTitle = document.getElementById("sceneTitle");
+    const sceneDesc = document.getElementById("sceneDesc");
+    const karaokeLine = document.getElementById("karaokeLine");
+    const pauseIndicator = document.getElementById("pauseIndicator");
+
+    let isPaused = false;
+    let currentSceneIndex = 0;
+    let sceneElapsed = 0;
+    let lastTick = performance.now();
+    let wordElements = [];
+
+    function renderScene(index) {
+      const s = scenes[index];
+      sceneBadge.textContent = s.badge;
+      sceneTitle.textContent = s.title;
+      sceneDesc.textContent = s.desc;
+
+      sceneCard.classList.remove("pop-in");
+      void sceneCard.offsetWidth;
+      sceneCard.classList.add("pop-in");
+
+      karaokeLine.innerHTML = "";
+      wordElements = s.words.map((word) => {
+        const span = document.createElement("span");
+        span.className = "k-word";
+        span.textContent = word;
+        karaokeLine.appendChild(span);
+        return span;
+      });
+    }
+
+    function updateTimeline(now) {
+      const dt = now - lastTick;
+      lastTick = now;
+
+      if (!isPaused) {
+        sceneElapsed += dt;
+        const currentScene = scenes[currentSceneIndex];
+
+        if (sceneElapsed >= currentScene.duration) {
+          sceneElapsed = 0;
+          currentSceneIndex = (currentSceneIndex + 1) % scenes.length;
+          renderScene(currentSceneIndex);
+        } else {
+          const progress = sceneElapsed / currentScene.duration;
+          const activeWordIdx = Math.min(
+            wordElements.length - 1,
+            Math.floor(progress * wordElements.length)
+          );
+
+          wordElements.forEach((el, idx) => {
+            el.classList.toggle("active", idx === activeWordIdx);
+          });
+        }
+      }
+
+      requestAnimationFrame(updateTimeline);
+    }
+
+    function togglePlayPause() {
+      isPaused = !isPaused;
+      lastTick = performance.now();
+      pauseIndicator.classList.toggle("visible", isPaused);
+    }
+
+    window.addEventListener("pointerdown", togglePlayPause);
+
+    renderScene(0);
+    requestAnimationFrame(updateTimeline);
+  </script>
+</body>
+</html>
