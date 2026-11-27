@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Stable Live Recovery</title>
+  <title>n8n Style Workflow Reel • 2.5s Per Scene & Facebook Follow</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -39,7 +39,8 @@
     body.is-paused .saroar-badge,
     body.is-paused .icon-wrap svg,
     body.is-paused .s6-mouse-cursor,
-    body.is-paused .s6-ripple {
+    body.is-paused .s6-ripple,
+    body.is-paused .fb-icon-circle {
       animation-play-state: paused !important;
     }
 
@@ -52,7 +53,7 @@
         radial-gradient(circle at var(--glow1-pos), var(--glow1-color), transparent 46%),
         radial-gradient(circle at var(--glow2-pos), var(--glow2-color), transparent 50%),
         #111318;
-      transition: background 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: background 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .n8n-dots-bg {
@@ -117,7 +118,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
 
     .title-bar-item.active {
@@ -153,10 +154,10 @@
       padding-bottom: 0;
       overflow: hidden;
       transition:
-        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        max-height 0.4s ease,
-        padding 0.4s ease;
+        opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        max-height 0.35s ease,
+        padding 0.35s ease;
     }
 
     .top-pill.show-title {
@@ -174,7 +175,7 @@
       padding: 2px 7px;
       margin-left: 3px;
       color: #e2e8f0;
-      transition: color 0.35s ease 0.42s;
+      transition: color 0.3s ease 0.28s;
     }
 
     .title-highlight-words::before {
@@ -195,7 +196,7 @@
 
     .top-pill.show-title .title-highlight-words::before {
       transform: scaleX(1);
-      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.32s;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.22s;
     }
 
     .live-dot {
@@ -301,7 +302,7 @@
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
       opacity: 0;
       transform: translateY(-6px) scale(0.96);
-      transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .saroar-result-popup.visible {
@@ -336,7 +337,7 @@
       opacity: 1;
       transform-origin: center center;
       transform: translate(0px, 0px) scale(0.45);
-      transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
       will-change: transform;
     }
 
@@ -359,7 +360,7 @@
       stroke: #475569;
       stroke-width: 3;
       stroke-linecap: round;
-      transition: stroke 0.35s ease, stroke-width 0.35s ease;
+      transition: stroke 0.3s ease, stroke-width 0.3s ease;
     }
 
     .n8n-wire.sub-wire {
@@ -384,7 +385,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: transform 0.35s ease;
+      transition: transform 0.3s ease;
     }
 
     .node-box {
@@ -398,7 +399,7 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
-      transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease, transform 0.35s ease;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
     }
 
     .n8n-node.agent-node .node-box {
@@ -468,7 +469,7 @@
       box-shadow: 0 4px 12px rgba(34, 197, 94, 0.5);
       opacity: 0;
       transform: scale(0.4);
-      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .n8n-node.active .node-check,
@@ -573,6 +574,7 @@
     .sheet-card th { background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight: 800; }
     .sheet-card tr.flash-row { background: rgba(34, 197, 94, 0.22); color: #dcfce7; font-weight: 700; }
 
+    /* সিন ৬: ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন + বাম পাশে ফেসবুক আইকন + রিং বেল + শেয়ার করুন */
     .scene6-intro-stage {
       position: absolute;
       inset: 0;
@@ -587,7 +589,7 @@
 
     .scene6-intro-stage.active {
       display: flex;
-      animation: s6FadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: s6FadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     @keyframes s6FadeIn {
@@ -596,14 +598,15 @@
     }
 
     .s6-intro-heading {
-      background: rgba(24, 28, 38, 0.92);
-      border: 1px solid rgba(250, 204, 21, 0.45);
+      background: rgba(24, 28, 38, 0.94);
+      border: 1px solid rgba(56, 189, 248, 0.55);
       color: #facc15;
       font-size: 13px;
-      font-weight: 800;
-      padding: 5px 14px;
+      font-weight: 900;
+      padding: 6px 15px;
       border-radius: 999px;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
     }
 
     .s6-cards-row {
@@ -629,37 +632,45 @@
       gap: 7px;
       text-align: center;
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5);
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
     }
 
-    .s6-photo-circle {
-      width: 66px;
-      height: 66px;
+    /* বাম পাশে ফেসবুক আইকন সার্কেল */
+    .fb-icon-circle {
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
-      overflow: hidden;
-      border: 2.5px solid #facc15;
-      box-shadow: 0 6px 18px rgba(250, 204, 21, 0.28);
-      background: #0f172a;
+      background: linear-gradient(135deg, #1877f2, #0ea5e9);
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 8px 20px rgba(24, 119, 242, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fbPulse 2s ease-in-out infinite;
     }
 
-    .s6-photo-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    @keyframes fbPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+    }
+
+    .fb-icon-circle svg {
+      width: 34px;
+      height: 34px;
+      fill: #ffffff;
     }
 
     .s6-profile-name {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 900;
       color: #ffffff;
-      line-height: 1.25;
+      line-height: 1.3;
     }
 
     .s6-profile-role {
       font-size: 10px;
       font-weight: 700;
-      color: #94a3b8;
+      color: #7dd3fc;
     }
 
     .s6-bell-view {
@@ -667,7 +678,7 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      transition: opacity 0.22s ease, transform 0.25s ease;
+      transition: opacity 0.18s ease, transform 0.2s ease;
     }
 
     .s6-bell-view.hide {
@@ -691,7 +702,7 @@
       box-shadow: 0 8px 20px rgba(250, 204, 21, 0.42);
       transform: scale(0.6);
       opacity: 0;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
     }
 
     .s6-follow-btn.show {
@@ -722,6 +733,7 @@
       font-weight: 800;
     }
 
+    /* ২.৫ সেকেন্ডের মধ্যে মাউস এসে রিং বেলে ক্লিক ও শেয়ারে ক্লিক করে চলে যাওয়া */
     .s6-mouse-cursor {
       position: absolute;
       left: 50%;
@@ -735,18 +747,18 @@
     }
 
     .scene6-intro-stage.active .s6-mouse-cursor {
-      animation: s6MouseSequence 3.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+      animation: s6MouseSequence2500 2.35s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
     }
 
-    @keyframes s6MouseSequence {
+    @keyframes s6MouseSequence2500 {
       0% { opacity: 0; transform: translate3d(-240px, 8px, 0) scale(1); }
-      18% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
-      24% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(0.8); }
-      30% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
-      55% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
-      61% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(0.8); }
-      67% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
-      88% { opacity: 0.7; transform: translate3d(220px, -28px, 0) scale(0.92); }
+      16% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
+      22% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(0.8); }
+      28% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
+      52% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
+      58% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(0.8); }
+      64% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
+      85% { opacity: 0.7; transform: translate3d(220px, -28px, 0) scale(0.92); }
       100% { opacity: 0; transform: translate3d(265px, -45px, 0) scale(0.85); }
     }
 
@@ -764,12 +776,12 @@
     }
 
     .s6-ripple.bell-r.fire {
-      animation: s6RippleAnim 0.55s ease-out forwards;
+      animation: s6RippleAnim 0.45s ease-out forwards;
     }
 
     .s6-ripple.share-r.fire {
       border-color: #4ade80;
-      animation: s6RippleAnim 0.55s ease-out forwards;
+      animation: s6RippleAnim 0.45s ease-out forwards;
     }
 
     @keyframes s6RippleAnim {
@@ -813,7 +825,7 @@
       background: rgba(11, 13, 19, 0.78);
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
       overflow: hidden;
-      transition: color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      transition: color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
     }
 
     .k-word::before {
@@ -825,7 +837,7 @@
       border-radius: 7px;
       transform: scaleX(0);
       transform-origin: left center;
-      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .k-word::after {
@@ -838,7 +850,7 @@
       border-radius: 99px;
       background: #fde047;
       opacity: 0;
-      transition: opacity 0.18s ease;
+      transition: opacity 0.14s ease;
     }
 
     .k-word.active {
@@ -889,7 +901,7 @@
       <div class="three-title-bars" id="threeTitleBars">
         <div class="title-bar-item active" id="tBar-0">১. ফর্ম ও ফিল্টার</div>
         <div class="title-bar-item" id="tBar-1">২. AI ও শিট</div>
-        <div class="title-bar-item" id="tBar-2">৩. আমার পরিচিতি</div>
+        <div class="title-bar-item" id="tBar-2">৩. ফেইজ ফলো</div>
       </div>
 
       <div class="top-pill show-title" id="topTitlePill">
@@ -1056,17 +1068,22 @@
         </div>
       </div>
 
+      <!-- সিন ৬: ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন + বাম পাশে ফেসবুক আইকন -->
       <div class="scene6-intro-stage" id="scene6IntroStage">
-        <div class="s6-intro-heading">আমার পরিচিতি • Saroar Alam Saboj</div>
+        <div class="s6-intro-heading">ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন</div>
         <div class="s6-cards-row">
+          <!-- কার্ড ১: বাম পাশে ফেসবুক আইকন -->
           <div class="s6-card">
-            <div class="s6-photo-circle">
-              <img id="s6ProfilePhoto" src="saroar01.png" alt="Saroar Alam Saboj" onerror="this.style.display='none';" />
+            <div class="fb-icon-circle" aria-label="Facebook">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+              </svg>
             </div>
-            <div class="s6-profile-name">Saroar Alam Saboj</div>
-            <div class="s6-profile-role">Automation & Web Creator</div>
+            <div class="s6-profile-name">ফেইজটি ফলো</div>
+            <div class="s6-profile-role">দিয়ে সংঙ্গে থাকুন</div>
           </div>
 
+          <!-- কার্ড ২: মধ্যখানে রিং বেল (ক্লিক হলে ফলো বাটন আসে) -->
           <div class="s6-card" id="s6BellCard">
             <div class="s6-ripple bell-r" id="s6BellRipple"></div>
             <div class="s6-bell-view" id="s6BellView">
@@ -1085,6 +1102,7 @@
             </div>
           </div>
 
+          <!-- কার্ড ৩: তৃতীয়তে শেয়ার করুন কার্ড -->
           <div class="s6-card" id="s6ShareCard">
             <div class="s6-ripple share-r" id="s6ShareRipple"></div>
             <div class="icon-wrap ic-cyan" style="width:46px;height:46px;border-radius:50%;">
@@ -1100,6 +1118,7 @@
             <div class="s6-card-sub" id="s6ShareSub">বন্ধুদের পাঠান</div>
           </div>
 
+          <!-- বাম পাশ থেকে আসা মাউস কার্সর -->
           <svg class="s6-mouse-cursor" id="s6MouseCursor" viewBox="0 0 36 36" fill="none">
             <path d="M9 5L9 27L15.2 21.4L19.8 31L24.2 28.9L19.6 19.4L27.5 19.4L9 5Z" fill="#ffffff" stroke="#090d16" stroke-width="2" stroke-linejoin="round"/>
           </svg>
@@ -1115,7 +1134,6 @@
   <script>
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
-    document.getElementById("s6ProfilePhoto").src = SAROAR_PHOTO_URL;
 
     const viewport = document.getElementById("cameraViewport");
     const canvas = document.getElementById("n8nCanvas");
@@ -1214,9 +1232,10 @@
       osc.stop(now + 0.1);
     }
 
+    /* প্রতি সিনে ২.৫ সেকেন্ড (2500ms) */
     const steps = [
       {
-        focusX: 115, focusY: 165, zoom: 1.18, duration: 3000, barGroup: 0,
+        focusX: 115, focusY: 165, zoom: 1.18, duration: 2500, barGroup: 0,
         bgColor1: "rgba(251, 146, 60, 0.17)", bgPos1: "28% 28%",
         bgColor2: "rgba(64, 201, 255, 0.16)", bgPos2: "64% 56%",
         saroarQuery: "লিড ফর্ম সাবমিট হলে কী হবে?",
@@ -1224,7 +1243,7 @@
         words: ["ফর্ম", "আসলেই", "অটোমেশন", "শুরু", "হয়।"]
       },
       {
-        focusX: 295, focusY: 165, zoom: 1.18, duration: 3000, barGroup: 0,
+        focusX: 295, focusY: 165, zoom: 1.18, duration: 2500, barGroup: 0,
         bgColor1: "rgba(56, 189, 248, 0.18)", bgPos1: "35% 32%",
         bgColor2: "rgba(129, 140, 248, 0.16)", bgPos2: "65% 58%",
         saroarQuery: "কীভাবে সঠিক ক্লায়েন্ট বাছাই হবে?",
@@ -1232,7 +1251,7 @@
         words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে।"]
       },
       {
-        focusX: 545, focusY: 225, zoom: 1.05, duration: 3000, barGroup: 1,
+        focusX: 545, focusY: 225, zoom: 1.05, duration: 2500, barGroup: 1,
         bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
         saroarQuery: "ক্লায়েন্টকে উত্তর দেবে কে?",
@@ -1240,7 +1259,7 @@
         words: ["AI", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়।"]
       },
       {
-        focusX: 790, focusY: 215, zoom: 1.08, duration: 3000, barGroup: 1,
+        focusX: 790, focusY: 215, zoom: 1.08, duration: 2500, barGroup: 1,
         bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
         saroarQuery: "লিডের তথ্য কোথায় জমা থাকবে?",
@@ -1248,7 +1267,7 @@
         words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়।"]
       },
       {
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 3000, barGroup: 1,
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 2500, barGroup: 1,
         bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
         saroarQuery: "n8n AI Lead Automation স্ট্যাটাস?",
@@ -1257,12 +1276,12 @@
       },
       {
         isIntroScene: true,
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 4200, barGroup: 2,
-        bgColor1: "rgba(250, 204, 21, 0.18)", bgPos1: "25% 30%",
-        bgColor2: "rgba(64, 201, 255, 0.18)", bgPos2: "72% 60%",
-        saroarQuery: "আমার পরিচিতি — Saroar Alam Saboj",
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 2500, barGroup: 2,
+        bgColor1: "rgba(24, 119, 242, 0.22)", bgPos1: "25% 30%",
+        bgColor2: "rgba(250, 204, 21, 0.18)", bgPos2: "72% 60%",
+        saroarQuery: "ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন",
         saroarResult: "ফলো করুন ও বন্ধুদের সাথে শেয়ার করুন!",
-        words: ["আমি", "সরোয়ার", "সবুজ।", "ফলো", "ও", "শেয়ার", "করুন!"]
+        words: ["ফেইজটি", "ফলো", "দিয়ে", "সংঙ্গে", "থাকুন!"]
       }
     ];
 
@@ -1351,7 +1370,7 @@
             wireIdx: idx,
             el: dot,
             t: cIdx * 0.5,
-            speed: spec.sub ? 0.007 : 0.0065
+            speed: spec.sub ? 0.0085 : 0.008
           });
         });
       });
@@ -1467,23 +1486,23 @@
         } else {
           const progress = elapsed / stepObj.duration;
 
-          const typingProgress = Math.min(1, progress / 0.4);
+          const typingProgress = Math.min(1, progress / 0.38);
           const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
           saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
 
-          if (progress >= 0.42) {
+          if (progress >= 0.4) {
             saroarResultPopup.classList.add("visible");
           }
 
           if (stepObj.isIntroScene) {
-            if (!bellClickedOnce && elapsed >= 920) {
+            if (!bellClickedOnce && elapsed >= 620) {
               bellClickedOnce = true;
               playClickSound(820);
               document.getElementById("s6BellRipple").classList.add("fire");
               document.getElementById("s6BellView").classList.add("hide");
               document.getElementById("s6FollowBtn").classList.add("show");
             }
-            if (!shareClickedTwice && elapsed >= 2100) {
+            if (!shareClickedTwice && elapsed >= 1450) {
               shareClickedTwice = true;
               playClickSound(640);
               document.getElementById("s6ShareRipple").classList.add("fire");
