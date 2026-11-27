@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Voice & Highlight Synced</title>
+  <title>n8n Style Workflow Reel • 3s Voice Delay Synced</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -1091,7 +1091,6 @@
         </div>
       </div>
 
-      <!-- সিন ৬: ডান পাশে ছোট সার্কেলে ফেসবুক লোগো + ৩টি কার্ড -->
       <div class="scene6-intro-stage" id="scene6IntroStage">
         <div class="s6-intro-banner">
           <span>ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন</span>
@@ -1162,6 +1161,8 @@
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
 
+    const VOICE_START_DELAY_MS = 3000; // ভয়েস ৩ সেকেন্ড (3000ms) পরে শুরু হবে
+
     const voiceAudio = document.getElementById("voiceAudio");
     voiceAudio.volume = 1.0;
 
@@ -1203,6 +1204,44 @@
     let audioUnlocked = false;
     let audioCtx = null;
     let hasInitialRendered = false;
+    let voiceDelayTimer = null;
+    let voiceHasStartedOnce = false;
+
+    function clearVoiceDelayTimer() {
+      if (voiceDelayTimer !== null) {
+        clearTimeout(voiceDelayTimer);
+        voiceDelayTimer = null;
+      }
+    }
+
+    function scheduleVoiceStart(fromStepStart = false) {
+      clearVoiceDelayTimer();
+      if (isPaused) return;
+
+      const delayMs = !voiceHasStartedOnce ? VOICE_START_DELAY_MS : 0;
+
+      const startPlayback = () => {
+        voiceDelayTimer = null;
+        if (isPaused) return;
+        try {
+          if (fromStepStart && steps[currentStep]) {
+            const targetSec = steps[currentStep].voiceStartSec;
+            if (typeof targetSec === "number" && Number.isFinite(targetSec)) {
+              voiceAudio.currentTime = targetSec;
+            }
+          }
+          const p = voiceAudio.play();
+          voiceHasStartedOnce = true;
+          if (p && typeof p.catch === "function") p.catch(() => {});
+        } catch (_) {}
+      };
+
+      if (delayMs > 0) {
+        voiceDelayTimer = setTimeout(startPlayback, delayMs);
+      } else {
+        startPlayback();
+      }
+    }
 
     function unlockAndPlayVoice(fromStepStart = false) {
       if (!audioCtx) {
@@ -1219,18 +1258,7 @@
           whooshAudio.currentTime = 0;
         }).catch(() => {});
       }
-      if (!isPaused) {
-        try {
-          if (fromStepStart && steps[currentStep]) {
-            const targetSec = steps[currentStep].voiceStartSec;
-            if (typeof targetSec === "number" && Number.isFinite(targetSec)) {
-              voiceAudio.currentTime = targetSec;
-            }
-          }
-          const p = voiceAudio.play();
-          if (p && typeof p.catch === "function") p.catch(() => {});
-        } catch (_) {}
-      }
+      scheduleVoiceStart(fromStepStart);
     }
 
     function playTransitionSound() {
@@ -1274,7 +1302,6 @@
       osc.stop(now + 0.1);
     }
 
-    /* Voice.aac এর সাথে সিন টাইমিং ও প্রতি শব্দের হাইলাইট ওয়েট */
     const steps = [
       {
         voiceStartSec: 0.0,
@@ -1610,6 +1637,7 @@
       pausePill.classList.toggle("visible", isPaused);
 
       if (isPaused) {
+        clearVoiceDelayTimer();
         whooshAudio.pause();
         voiceAudio.pause();
       } else {
