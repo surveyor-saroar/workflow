@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • 9:16 Auto Camera & Phind Accent</title>
+  <title>n8n Style Workflow Reel • 9:16 Auto Camera & saroar Accent</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -34,7 +34,15 @@
       background-color: #111318;
     }
 
-    /* সিন অনুযায়ী কন্টিনিউয়াস রঙ পরিবর্তনের লেয়ার */
+    /* পজ অবস্থায় সব CSS অ্যানিমেশন থামানো */
+    body.is-paused .n8n-dots-bg,
+    body.is-paused .typing-cursor,
+    body.is-paused .saroar-badge,
+    body.is-paused .icon-wrap svg {
+      animation-play-state: paused !important;
+    }
+
+    /* সিন অনুযায়ী কন্টিনিউয়াস রঙ পরিবর্তনের লেয়ার */
     .scene-ambient-bg {
       position: fixed;
       inset: 0;
@@ -87,7 +95,7 @@
       overflow: visible;
     }
 
-    /* উপরের হেডার ও Phind সার্চ কার্ড র‍্যাপার */
+    /* উপরের হেডার ও saroar সার্চ কার্ড র‍্যাপার */
     .top-stack {
       position: relative;
       z-index: 24;
@@ -98,7 +106,7 @@
       gap: 10px;
     }
 
-    /* ২ সিন পর পর দৃশ্যমান হওয়া টাইটেল পিল */
+    /* ২ সিন পর পর দৃশ্যমান হওয়া টাইটেল পিল */
     .top-pill {
       display: inline-flex;
       align-items: center;
@@ -134,7 +142,7 @@
       padding-bottom: 7px;
     }
 
-    /* টাইটেলের শেষের দুটি ওয়ার্ডে 0.32s ডিলের পর 0.6s জুড়ে #ffd24c হাইলাইট */
+    /* টাইটেলের শেষের দুটি ওয়ার্ডে 0.32s ডিলের পর 0.6s জুড়ে #ffd24c হাইলাইট */
     .title-highlight-words {
       position: relative;
       z-index: 1;
@@ -175,8 +183,8 @@
       flex-shrink: 0;
     }
 
-    /* Phind-স্টাইল সার্চ বক্স ও রেজাল্ট পপ-আপ */
-    .phind-widget {
+    /* saroar ব্যাজসহ সার্চ বক্স ও রেজাল্ট পপ-আপ */
+    .saroar-widget {
       width: 94%;
       max-width: 360px;
       display: flex;
@@ -184,29 +192,36 @@
       gap: 6px;
     }
 
-    .phind-search-bar {
+    .saroar-search-bar {
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(18, 21, 29, 0.92);
-      border: 1px solid rgba(64, 201, 255, 0.35);
+      background: rgba(18, 21, 29, 0.94);
+      border: 1px solid rgba(250, 204, 21, 0.45);
       border-radius: 12px;
       padding: 8px 12px;
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
     }
 
-    .phind-badge {
-      font-size: 10px;
+    .saroar-badge {
+      font-size: 11.5px;
       font-weight: 900;
       letter-spacing: 0.04em;
       color: #090d16;
-      background: linear-gradient(90deg, #40C9FF, #38bdf8);
-      padding: 2px 7px;
+      background: linear-gradient(90deg, #facc15, #40C9FF);
+      padding: 2px 9px;
       border-radius: 6px;
       flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
+      animation: saroarBadgePulse 2.2s ease-in-out infinite;
     }
 
-    .phind-typing-text {
+    @keyframes saroarBadgePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    .saroar-typing-text {
       font-size: 12.5px;
       font-weight: 700;
       color: #f1f5f9;
@@ -230,7 +245,7 @@
       50%, 100% { opacity: 0; }
     }
 
-    .phind-result-popup {
+    .saroar-result-popup {
       background: rgba(24, 28, 38, 0.96);
       border: 1px solid rgba(250, 204, 21, 0.45);
       border-left: 3px solid #facc15;
@@ -245,12 +260,12 @@
       transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .phind-result-popup.visible {
+    .saroar-result-popup.visible {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
 
-    .phind-result-tag {
+    .saroar-result-tag {
       color: #facc15;
       font-weight: 800;
       margin-right: 4px;
@@ -442,9 +457,9 @@
     }
 
     .icon-wrap {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -452,29 +467,89 @@
     }
 
     .sub-node .icon-wrap {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
     }
 
     .icon-wrap svg {
-      width: 28px;
-      height: 28px;
+      width: 29px;
+      height: 29px;
       fill: none;
       stroke-width: 2.2;
       stroke-linecap: round;
       stroke-linejoin: round;
+      transform-origin: center center;
+      will-change: transform;
     }
 
     .sub-node .icon-wrap svg {
-      width: 21px;
-      height: 21px;
+      width: 22px;
+      height: 22px;
     }
 
-    .ic-orange { background: rgba(249, 115, 22, 0.16); color: #fb923c; }
-    .ic-blue   { background: rgba(56, 189, 248, 0.16); color: #38bdf8; }
-    .ic-purple { background: rgba(192, 132, 252, 0.18); color: #c084fc; }
-    .ic-green  { background: rgba(34, 197, 94, 0.16); color: #4ade80; }
-    .ic-cyan   { background: rgba(64, 201, 255, 0.16); color: #40C9FF; }
+    /* নতুন আপডেটেড আইকনগুলোর কন্টিনিউয়াস অ্যানিমেশন */
+    .ic-orange svg {
+      animation: iconBoltBounce 2.2s ease-in-out infinite;
+    }
+
+    .ic-blue svg {
+      animation: iconFilterSwing 2.6s ease-in-out infinite;
+    }
+
+    .ic-purple svg {
+      animation: iconAgentFloat 2.2s ease-in-out infinite;
+    }
+
+    .ic-cyan svg {
+      animation: iconSparkSpin 4.2s linear infinite;
+    }
+
+    .sub-node .ic-purple svg {
+      animation: iconMemoryPulse 2.5s ease-in-out infinite;
+    }
+
+    .ic-green svg {
+      animation: iconSheetBeat 2.1s ease-in-out infinite;
+    }
+
+    @keyframes iconBoltBounce {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-3px) scale(1.14); }
+    }
+
+    @keyframes iconFilterSwing {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(-9deg) scale(1.06); }
+      75% { transform: rotate(9deg) scale(1.06); }
+    }
+
+    @keyframes iconAgentFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-3.5px) scale(1.08); }
+    }
+
+    @keyframes iconSparkSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    @keyframes iconMemoryPulse {
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      50% { transform: scaleY(1.12) scaleX(0.95); }
+    }
+
+    @keyframes iconSheetBeat {
+      0%, 100% { transform: scale(1); }
+      35% { transform: scale(1.13); }
+      70% { transform: scale(0.97); }
+    }
+
+    .ic-orange { background: rgba(249, 115, 22, 0.18); color: #fb923c; }
+    .ic-blue   { background: rgba(56, 189, 248, 0.18); color: #38bdf8; }
+    .ic-purple { background: rgba(192, 132, 252, 0.2);  color: #c084fc; }
+    .ic-green  { background: rgba(34, 197, 94, 0.18);  color: #4ade80; }
+    .ic-cyan   { background: rgba(64, 201, 255, 0.18);  color: #40C9FF; }
 
     .agent-inner-text {
       text-align: left;
@@ -660,23 +735,23 @@
 
   <div class="stage-9x16">
     <div class="top-stack">
-      <!-- ২ সিন পর পর দৃশ্যমান হওয়া টাইটেল + শেষের দুই ওয়ার্ডে #ffd24c হাইলাইট -->
+      <!-- ২ সিন পর পর দৃশ্যমান হওয়া টাইটেল + শেষের দুই ওয়ার্ডে #ffd24c হাইলাইট -->
       <div class="top-pill show-title" id="topTitlePill">
         <span class="live-dot"></span>
         <span>n8n AI <span class="title-highlight-words">Lead Automation</span></span>
       </div>
 
-      <!-- Phind-স্টাইল সার্চ বক্স, টাইপিং কার্সর ও রেজাল্ট পপ-আপ -->
-      <div class="phind-widget">
-        <div class="phind-search-bar">
-          <span class="phind-badge">Phind</span>
-          <div class="phind-typing-text">
-            <span id="phindQueryText"></span><span class="typing-cursor"></span>
+      <!-- saroar ব্যাজসহ সার্চ বক্স, টাইপিং কার্সর ও রেজাল্ট পপ-আপ -->
+      <div class="saroar-widget">
+        <div class="saroar-search-bar">
+          <span class="saroar-badge">saroar</span>
+          <div class="saroar-typing-text">
+            <span id="saroarQueryText"></span><span class="typing-cursor"></span>
           </div>
         </div>
-        <div class="phind-result-popup" id="phindResultPopup">
-          <span class="phind-result-tag">✓ AI Answer:</span>
-          <span id="phindResultText"></span>
+        <div class="saroar-result-popup" id="saroarResultPopup">
+          <span class="saroar-result-tag">✓ saroar AI:</span>
+          <span id="saroarResultText"></span>
         </div>
       </div>
     </div>
@@ -694,14 +769,13 @@
           <g id="pulsesLayer"></g>
         </svg>
 
-        <!-- নোড ১ -->
+        <!-- নোড ১: আপডেটেড Webhook Bolt আইকন -->
         <div class="n8n-node active" id="node-0" style="left: 36px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
             <div class="icon-wrap ic-orange">
               <svg stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M9 11l3 3L22 4"></path>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
               </svg>
             </div>
             <div class="port out"></div>
@@ -712,14 +786,16 @@
           </div>
         </div>
 
-        <!-- নোড ২ -->
+        <!-- নোড ২: আপডেটেড Filter Sliders আইকন -->
         <div class="n8n-node" id="node-1" style="left: 230px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
             <div class="port in"></div>
             <div class="icon-wrap ic-blue">
               <svg stroke="currentColor" viewBox="0 0 24 24">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                <line x1="4" y1="6" x2="20" y2="6"></line>
+                <line x1="7" y1="12" x2="17" y2="12"></line>
+                <line x1="10" y1="18" x2="14" y2="18"></line>
               </svg>
             </div>
             <div class="port out"></div>
@@ -730,17 +806,15 @@
           </div>
         </div>
 
-        <!-- নোড ৩: AI Agent -->
+        <!-- নোড ৩: আপডেটেড AI Agent Brain/Spark আইকন -->
         <div class="n8n-node agent-node" id="node-2" style="left: 430px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
             <div class="port in"></div>
             <div class="icon-wrap ic-purple">
               <svg stroke="currentColor" viewBox="0 0 24 24">
-                <rect x="3" y="4" width="18" height="15" rx="3"></rect>
-                <circle cx="9" cy="11" r="1.3"></circle>
-                <circle cx="15" cy="11" r="1.3"></circle>
-                <path d="M9 15h6"></path>
+                <path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"></path>
+                <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z"></path>
               </svg>
             </div>
             <div class="agent-inner-text">
@@ -757,14 +831,16 @@
           </div>
         </div>
 
-        <!-- সাব-নোড ৩ক -->
+        <!-- সাব-নোড ৩ক: আপডেটেড Chat Model আইকন -->
         <div class="n8n-node sub-node" id="sub-0" style="left: 446px; top: 285px;">
           <div class="node-box">
             <div class="port top"></div>
             <div class="icon-wrap ic-cyan">
               <svg stroke="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="8"></circle>
-                <path d="M12 8v8M8 12h8"></path>
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <circle cx="9" cy="10" r="1"></circle>
+                <circle cx="12" cy="10" r="1"></circle>
+                <circle cx="15" cy="10" r="1"></circle>
               </svg>
             </div>
           </div>
@@ -773,15 +849,14 @@
           </div>
         </div>
 
-        <!-- সাব-নোড ৩খ -->
+        <!-- সাব-নোড ৩খ: আপডেটেড Memory Chip আইকন -->
         <div class="n8n-node sub-node" id="sub-1" style="left: 568px; top: 285px;">
           <div class="node-box">
             <div class="port top"></div>
             <div class="icon-wrap ic-purple">
               <svg stroke="currentColor" viewBox="0 0 24 24">
-                <ellipse cx="12" cy="6" rx="7" ry="3"></ellipse>
-                <path d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6"></path>
-                <path d="M5 12v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6"></path>
+                <rect x="7" y="7" width="10" height="10" rx="2"></rect>
+                <path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"></path>
               </svg>
             </div>
           </div>
@@ -790,15 +865,17 @@
           </div>
         </div>
 
-        <!-- নোড ৪: Google Sheets -->
+        <!-- নোড ৪: আপডেটেড Google Sheets Table আইকন -->
         <div class="n8n-node" id="node-3" style="left: 715px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
             <div class="port in"></div>
             <div class="icon-wrap ic-green">
               <svg stroke="currentColor" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                <path d="M3 9h18M3 15h18M9 3v18M15 3v18"></path>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="8" y1="13" x2="16" y2="13"></line>
+                <line x1="8" y1="17" x2="16" y2="17"></line>
               </svg>
             </div>
           </div>
@@ -838,9 +915,9 @@
     const canvas = document.getElementById("n8nCanvas");
     const sceneAmbientBg = document.getElementById("sceneAmbientBg");
     const topTitlePill = document.getElementById("topTitlePill");
-    const phindQueryText = document.getElementById("phindQueryText");
-    const phindResultPopup = document.getElementById("phindResultPopup");
-    const phindResultText = document.getElementById("phindResultText");
+    const saroarQueryText = document.getElementById("saroarQueryText");
+    const saroarResultPopup = document.getElementById("saroarResultPopup");
+    const saroarResultText = document.getElementById("saroarResultText");
     const wiresLayer = document.getElementById("wiresLayer");
     const pulsesLayer = document.getElementById("pulsesLayer");
     const karaokeLine = document.getElementById("karaokeLine");
@@ -858,7 +935,7 @@
       document.getElementById("sub-1")
     ];
 
-    /* সিন পরিবর্তনের (ট্রানজিশনের) সময় whoosh sound */
+    /* সিন পরিবর্তনের (ট্রানজিশনের) সময় whoosh sound */
     const whooshAudio = new Audio("whoosh.mp3.wav");
     whooshAudio.preload = "auto";
     whooshAudio.volume = 0.75;
@@ -888,7 +965,7 @@
       } catch (_) {}
     }
 
-    /* প্রতিটি সিন ৩ সেকেন্ড (3000ms) + Phind টাইপিং ও রেজাল্ট পপ-আপ ডেটা */
+    /* প্রতিটি সিন ৩ সেকেন্ড (3000ms) + saroar টাইপিং ও রেজাল্ট পপ-আপ ডেটা */
     const steps = [
       {
         focusX: 115,
@@ -899,8 +976,8 @@
         bgPos1: "28% 28%",
         bgColor2: "rgba(64, 201, 255, 0.16)",
         bgPos2: "64% 56%",
-        phindQuery: "লিড ফর্ম সাবমিট হলে কী হবে?",
-        phindResult: "Webhook সাথে সাথে ওয়ার্কফ্লো ট্রিগার করবে",
+        saroarQuery: "লিড ফর্ম সাবমিট হলে কী হবে?",
+        saroarResult: "Webhook সাথে সাথে ওয়ার্কফ্লো ট্রিগার করবে",
         words: ["ফর্ম", "আসলেই", "অটোমেশন", "শুরু", "হয়।"]
       },
       {
@@ -912,8 +989,8 @@
         bgPos1: "35% 32%",
         bgColor2: "rgba(129, 140, 248, 0.16)",
         bgPos2: "65% 58%",
-        phindQuery: "কীভাবে সঠিক ক্লায়েন্ট বাছাই হবে?",
-        phindResult: "Intent Filter আসল লিড আলাদা করবে",
+        saroarQuery: "কীভাবে সঠিক ক্লায়েন্ট বাছাই হবে?",
+        saroarResult: "Intent Filter আসল লিড আলাদা করবে",
         words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে।"]
       },
       {
@@ -925,8 +1002,8 @@
         bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)",
         bgPos2: "62% 55%",
-        phindQuery: "ক্লায়েন্টকে উত্তর দেবে কে?",
-        phindResult: "AI Agent + Memory স্মার্ট রিপ্লাই তৈরি করবে",
+        saroarQuery: "ক্লায়েন্টকে উত্তর দেবে কে?",
+        saroarResult: "AI Agent + Memory স্মার্ট রিপ্লাই তৈরি করবে",
         words: ["AI", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়।"]
       },
       {
@@ -938,8 +1015,8 @@
         bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)",
         bgPos2: "66% 56%",
-        phindQuery: "লিডের তথ্য কোথায় জমা থাকবে?",
-        phindResult: "Google Sheets-এ অটোমেটিক নতুন রো যুক্ত হবে",
+        saroarQuery: "লিডের তথ্য কোথায় জমা থাকবে?",
+        saroarResult: "Google Sheets-এ অটোমেটিক নতুন রো যুক্ত হবে",
         words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়।"]
       },
       {
@@ -951,8 +1028,8 @@
         bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)",
         bgPos2: "66% 56%",
-        phindQuery: "n8n AI Lead Automation স্ট্যাটাস?",
-        phindResult: "১০০% অটোমেটেড লিড ফ্লো এখন সক্রিয়!",
+        saroarQuery: "n8n AI Lead Automation স্ট্যাটাস?",
+        saroarResult: "১০০% অটোমেটেড লিড ফ্লো এখন সক্রিয়!",
         words: ["পুরো", "n8n", "ফ্লো", "একদম", "রেডি!"]
       }
     ];
@@ -1062,10 +1139,10 @@
         topTitlePill.classList.add("show-title");
       }
 
-      /* Phind সার্চ বক্স রিসেট ও রেজাল্ট পপ-আপ প্রস্তুত */
-      phindQueryText.textContent = "";
-      phindResultText.textContent = stepObj.phindResult;
-      phindResultPopup.classList.remove("visible");
+      /* saroar সার্চ বক্স রিসেট ও রেজাল্ট পপ-আপ প্রস্তুত */
+      saroarQueryText.textContent = "";
+      saroarResultText.textContent = stepObj.saroarResult;
+      saroarResultPopup.classList.remove("visible");
 
       applySceneBackground(stepObj);
 
@@ -1119,14 +1196,14 @@
         } else {
           const progress = elapsed / stepObj.duration;
 
-          /* Phind সার্চ বক্সে টাইপিং অ্যানিমেশন (প্রথম ৪০% সময়ে টাইপ শেষ হবে) */
+          /* saroar সার্চ বক্সে টাইপিং অ্যানিমেশন (প্রথম ৪০% সময়ে টাইপ শেষ হবে) */
           const typingProgress = Math.min(1, progress / 0.4);
-          const charCount = Math.floor(typingProgress * stepObj.phindQuery.length);
-          phindQueryText.textContent = stepObj.phindQuery.slice(0, charCount);
+          const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
+          saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
 
-          /* টাইপিং শেষ হলেই Phind রেজাল্ট পপ-আপ প্রদর্শন */
+          /* টাইপিং শেষ হলেই রেজাল্ট পপ-আপ প্রদর্শন */
           if (progress >= 0.42) {
-            phindResultPopup.classList.add("visible");
+            saroarResultPopup.classList.add("visible");
           }
 
           /* মূল শব্দের পেছনে হলুদ হাইলাইট বার অ্যাকসেন্ট */
@@ -1159,6 +1236,7 @@
       unlockSoundSystem();
       isPaused = !isPaused;
       lastTick = performance.now();
+      document.body.classList.toggle("is-paused", isPaused);
       pausePill.classList.toggle("visible", isPaused);
       if (isPaused) {
         whooshAudio.pause();
