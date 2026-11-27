@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Voice +3s Fast Synced</title>
+  <title>n8n Style Workflow Reel • Voice 1.5s Fast Synced</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -1161,10 +1161,23 @@
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
 
-    const VOICE_FAST_FORWARD_SEC = 3.0; // ভয়েস ৩ সেকেন্ড ফাস্ট/এগিয়ে শুরু হবে
+    // মোট ভয়েস থেকে ১.৫ সেকেন্ড ফাস্ট করে চালানোর সেটিং
+    const VOICE_FAST_TRIM_SEC = 1.5;
 
     const voiceAudio = document.getElementById("voiceAudio");
     voiceAudio.volume = 1.0;
+
+    function applyTotalVoiceFast15s() {
+      const totalDur = voiceAudio.duration;
+      if (Number.isFinite(totalDur) && totalDur > VOICE_FAST_TRIM_SEC + 0.5) {
+        const fastRate = totalDur / (totalDur - VOICE_FAST_TRIM_SEC);
+        voiceAudio.playbackRate = Math.min(2.0, Math.max(1.0, fastRate));
+      } else {
+        voiceAudio.playbackRate = 1.15;
+      }
+    }
+
+    voiceAudio.addEventListener("loadedmetadata", applyTotalVoiceFast15s);
 
     const viewport = document.getElementById("cameraViewport");
     const canvas = document.getElementById("n8nCanvas");
@@ -1205,12 +1218,12 @@
     let audioCtx = null;
     let hasInitialRendered = false;
 
-    function getFastForwardedSec(baseSec = 0) {
+    function getFastStartSec(baseSec = 0) {
+      const startCandidate = Math.max(0, baseSec + VOICE_FAST_TRIM_SEC);
       const dur = Number.isFinite(voiceAudio.duration) && voiceAudio.duration > 0
         ? voiceAudio.duration
         : Infinity;
-      const candidate = baseSec + VOICE_FAST_FORWARD_SEC;
-      return dur < Infinity ? Math.min(candidate, Math.max(0, dur - 0.1)) : candidate;
+      return dur < Infinity ? Math.min(startCandidate, Math.max(0, dur - 0.1)) : startCandidate;
     }
 
     function unlockAndPlayVoice(fromStepStart = false) {
@@ -1228,13 +1241,14 @@
           whooshAudio.currentTime = 0;
         }).catch(() => {});
       }
+      applyTotalVoiceFast15s();
       if (!isPaused) {
         try {
           if (fromStepStart && steps[currentStep]) {
             const baseSec = typeof steps[currentStep].voiceStartSec === "number"
               ? steps[currentStep].voiceStartSec
               : 0;
-            voiceAudio.currentTime = getFastForwardedSec(baseSec);
+            voiceAudio.currentTime = getFastStartSec(baseSec);
           }
           const p = voiceAudio.play();
           if (p && typeof p.catch === "function") p.catch(() => {});
@@ -1286,7 +1300,7 @@
     const steps = [
       {
         voiceStartSec: 0.0,
-        focusX: 115, focusY: 165, zoom: 1.18, duration: 2050, barGroup: 0,
+        focusX: 115, focusY: 165, zoom: 1.18, duration: 1800, barGroup: 0,
         bgColor1: "rgba(251, 146, 60, 0.17)", bgPos1: "28% 28%",
         bgColor2: "rgba(64, 201, 255, 0.16)", bgPos2: "64% 56%",
         saroarQuery: "ফর্ম সাবমিট হলে কী হবে?",
@@ -1295,8 +1309,8 @@
         weights: [0.16, 0.20, 0.22, 0.24, 0.18]
       },
       {
-        voiceStartSec: 2.05,
-        focusX: 295, focusY: 165, zoom: 1.18, duration: 1950, barGroup: 0,
+        voiceStartSec: 1.8,
+        focusX: 295, focusY: 165, zoom: 1.18, duration: 1700, barGroup: 0,
         bgColor1: "rgba(56, 189, 248, 0.18)", bgPos1: "35% 32%",
         bgColor2: "rgba(129, 140, 248, 0.16)", bgPos2: "65% 58%",
         saroarQuery: "ফিল্টার কীভাবে কাজ করে?",
@@ -1305,8 +1319,8 @@
         weights: [0.20, 0.18, 0.24, 0.22, 0.16]
       },
       {
-        voiceStartSec: 4.0,
-        focusX: 545, focusY: 225, zoom: 1.05, duration: 2100, barGroup: 1,
+        voiceStartSec: 3.5,
+        focusX: 545, focusY: 225, zoom: 1.05, duration: 1850, barGroup: 1,
         bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
         saroarQuery: "উত্তর কীভাবে তৈরি হয়?",
@@ -1315,8 +1329,8 @@
         weights: [0.13, 0.15, 0.19, 0.17, 0.17, 0.19]
       },
       {
-        voiceStartSec: 6.1,
-        focusX: 790, focusY: 215, zoom: 1.08, duration: 1750, barGroup: 1,
+        voiceStartSec: 5.35,
+        focusX: 790, focusY: 215, zoom: 1.08, duration: 1550, barGroup: 1,
         bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
         saroarQuery: "ডেটা কোথায় সেভ হয়?",
@@ -1325,8 +1339,8 @@
         weights: [0.20, 0.20, 0.20, 0.22, 0.18]
       },
       {
-        voiceStartSec: 7.85,
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 1950, barGroup: 1,
+        voiceStartSec: 6.9,
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 1700, barGroup: 1,
         bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
         saroarQuery: "n8n ফ্লো স্ট্যাটাস কী?",
@@ -1335,9 +1349,9 @@
         weights: [0.14, 0.12, 0.13, 0.12, 0.15, 0.17, 0.17]
       },
       {
-        voiceStartSec: 9.8,
+        voiceStartSec: 8.6,
         isIntroScene: true,
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 2200, barGroup: 2,
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 1900, barGroup: 2,
         bgColor1: "rgba(24, 119, 242, 0.22)", bgPos1: "25% 30%",
         bgColor2: "rgba(250, 204, 21, 0.18)", bgPos2: "72% 60%",
         saroarQuery: "ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন",
@@ -1481,9 +1495,10 @@
 
       if (hasInitialRendered) {
         playTransitionSound();
+        applyTotalVoiceFast15s();
         if (audioUnlocked && !isPaused && typeof stepObj.voiceStartSec === "number") {
           try {
-            voiceAudio.currentTime = getFastForwardedSec(stepObj.voiceStartSec);
+            voiceAudio.currentTime = getFastStartSec(stepObj.voiceStartSec);
             voiceAudio.play().catch(() => {});
           } catch (_) {}
         }
