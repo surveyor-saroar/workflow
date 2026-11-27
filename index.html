@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Voice Auto-Synced</title>
+  <title>n8n Style Workflow Reel • 0.12s Lag Adjusted Sync</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -1161,6 +1161,9 @@
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
 
+    // অ্যানিমেশন ভয়েস থেকে 0.12s ফাস্ট থাকায় অ্যানিমেশন রিড করার সময় 0.12s পেছনে ধরা হয়েছে
+    const ANIM_LAG_OFFSET_SEC = 0.12;
+
     const voiceAudio = document.getElementById("voiceAudio");
     voiceAudio.volume = 1.0;
     voiceAudio.playbackRate = 1.0;
@@ -1206,7 +1209,6 @@
     let hasInitialRendered = false;
     let fallbackAudioSec = 0;
 
-    // আনুপাতিক টাইমলাইন (মোট 1.00 = Voice.aac এর মোট দৈর্ঘ্য)
     const steps = [
       {
         startRatio: 0.00, endRatio: 0.17,
@@ -1279,16 +1281,18 @@
     }
 
     function getCurrentVoiceTime(dtSec) {
+      let rawSec = 0;
       if (!voiceAudio.paused && !voiceAudio.ended && Number.isFinite(voiceAudio.currentTime)) {
-        fallbackAudioSec = voiceAudio.currentTime;
-        return voiceAudio.currentTime;
-      }
-      if (!isPaused && !audioUnlocked) {
+        rawSec = voiceAudio.currentTime;
+        fallbackAudioSec = rawSec;
+      } else if (!isPaused && !audioUnlocked) {
         const dur = getTotalVoiceDuration();
         fallbackAudioSec = (fallbackAudioSec + dtSec) % dur;
-        return fallbackAudioSec;
+        rawSec = fallbackAudioSec;
+      } else {
+        rawSec = Number.isFinite(voiceAudio.currentTime) ? voiceAudio.currentTime : fallbackAudioSec;
       }
-      return Number.isFinite(voiceAudio.currentTime) ? voiceAudio.currentTime : fallbackAudioSec;
+      return Math.max(0, rawSec - ANIM_LAG_OFFSET_SEC);
     }
 
     function resolveStepFromTime(currentSec) {
@@ -1665,12 +1669,12 @@
     }
 
     voiceAudio.addEventListener("loadedmetadata", () => {
-      const resolved = resolveStepFromTime(voiceAudio.currentTime || 0);
+      const resolved = resolveStepFromTime(Math.max(0, (voiceAudio.currentTime || 0) - ANIM_LAG_OFFSET_SEC));
       setStep(resolved.stepIndex);
     });
 
     voiceAudio.addEventListener("seeked", () => {
-      const resolved = resolveStepFromTime(voiceAudio.currentTime || 0);
+      const resolved = resolveStepFromTime(Math.max(0, (voiceAudio.currentTime || 0) - ANIM_LAG_OFFSET_SEC));
       setStep(resolved.stepIndex);
       syncVisualsToProgress(steps[currentStep], resolved.stepProgress, resolved.stepElapsedMs);
     });
