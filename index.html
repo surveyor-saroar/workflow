@@ -30,7 +30,7 @@
         #111318;
     }
 
-    /* n8n-স্টাইল সূক্ষ্ম ডটেড ক্যানভাস ব্যাকগ্রাউন্ড (সবচেয়ে নিচের লেয়ারে) */
+    /* n8n-স্টাইল সূক্ষ্ম ডটেড ক্যানভাস ব্যাকগ্রাউন্ড */
     .n8n-dots-bg {
       position: fixed;
       inset: 0;
@@ -41,7 +41,7 @@
       mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.98) 52%, rgba(0, 0, 0, 0.35) 100%);
     }
 
-    /* ৯:১৬ ভার্টিক্যাল কন্টেন্ট ফ্রেম (ব্যাকগ্রাউন্ডের ওপরে স্পষ্টভাবে দৃশ্যমান) */
+    /* ৯:১৬ ভার্টিক্যাল কন্টেন্ট ফ্রেম */
     .stage-9x16 {
       position: relative;
       z-index: 10;
@@ -165,7 +165,6 @@
       transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease, transform 0.35s ease;
     }
 
-    /* AI Agent বড় হরিজন্টাল বক্স */
     .n8n-node.agent-node .node-box {
       width: 230px;
       height: 104px;
@@ -174,7 +173,6 @@
       gap: 14px;
     }
 
-    /* সাব-নোড (গোল n8n টুল/মডেল নোড) */
     .n8n-node.sub-node .node-box {
       width: 74px;
       height: 74px;
@@ -182,7 +180,6 @@
       background: #191c24;
     }
 
-    /* সক্রিয় ও সম্পন্ন নোড স্টেট */
     .n8n-node.active .node-box {
       background: #232734;
       border-color: #40C9FF;
@@ -197,7 +194,6 @@
       border-color: #22c55e;
     }
 
-    /* n8n কানেক্টর পোর্ট ডট */
     .port {
       position: absolute;
       width: 12px;
@@ -246,7 +242,6 @@
       background: #22c55e;
     }
 
-    /* সবুজ চেকমার্ক ব্যাজ (✓) */
     .node-check {
       position: absolute;
       top: -8px;
@@ -273,7 +268,6 @@
       transform: scale(1);
     }
 
-    /* নোড আইকন */
     .icon-wrap {
       width: 48px;
       height: 48px;
@@ -325,7 +319,6 @@
       margin-top: 2px;
     }
 
-    /* n8n বক্সের নিচে নাম ও সাবটাইটেল */
     .node-label {
       margin-top: 10px;
       text-align: center;
@@ -348,7 +341,6 @@
       font-size: 13px;
     }
 
-    /* Google Sheet নোডের নিচে লাইভ মিনি টেবিল */
     .sheet-card {
       margin-top: 10px;
       width: 215px;
@@ -384,7 +376,7 @@
       font-weight: 700;
     }
 
-    /* নিচে বড় ও এক-লাইনের হলুদ কারাওকে ক্যাপশন */
+    /* নিচে এক লাইনে বড় হলুদ কারাওকে ক্যাপশন */
     .karaoke-box {
       position: relative;
       z-index: 20;
@@ -425,7 +417,6 @@
       transform: scale(1.06);
     }
 
-    /* পজ ব্যাজ */
     .pause-pill {
       position: fixed;
       top: 16px;
@@ -461,7 +452,6 @@
 
     <div class="camera-viewport" id="cameraViewport">
       <div class="n8n-canvas" id="n8nCanvas">
-        <!-- SVG Bezier কানেক্টিং তার ও গ্লোয়িং পালস -->
         <svg class="wires-svg" id="wiresSvg" viewBox="0 0 920 440">
           <defs>
             <linearGradient id="n8nGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -473,7 +463,7 @@
           <g id="pulsesLayer"></g>
         </svg>
 
-        <!-- নোড ১: Form Trigger -->
+        <!-- নোড ১ -->
         <div class="n8n-node active" id="node-0" style="left: 36px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -491,7 +481,7 @@
           </div>
         </div>
 
-        <!-- নোড ২: Intent Filter -->
+        <!-- নোড ২ -->
         <div class="n8n-node" id="node-1" style="left: 230px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -509,7 +499,7 @@
           </div>
         </div>
 
-        <!-- নোড ৩: AI Agent (n8n Main Agent Box) -->
+        <!-- নোড ৩: AI Agent -->
         <div class="n8n-node agent-node" id="node-2" style="left: 430px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -536,7 +526,7 @@
           </div>
         </div>
 
-        <!-- সাব-নোড ৩ক: OpenAI Chat Model -->
+        <!-- সাব-নোড ৩ক -->
         <div class="n8n-node sub-node" id="sub-0" style="left: 446px; top: 285px;">
           <div class="node-box">
             <div class="port top"></div>
@@ -552,7 +542,7 @@
           </div>
         </div>
 
-        <!-- সাব-নোড ৩খ: Window Memory -->
+        <!-- সাব-নোড ৩খ -->
         <div class="n8n-node sub-node" id="sub-1" style="left: 568px; top: 285px;">
           <div class="node-box">
             <div class="port top"></div>
@@ -569,7 +559,7 @@
           </div>
         </div>
 
-        <!-- নোড ৪: Google Sheets + Live Table -->
+        <!-- নোড ৪: Google Sheets -->
         <div class="n8n-node" id="node-3" style="left: 715px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -607,7 +597,6 @@
       </div>
     </div>
 
-    <!-- নিচে এক লাইনে বড় হলুদ কারাওকে ক্যাপশন -->
     <div class="karaoke-box">
       <div class="karaoke-line" id="karaokeLine"></div>
     </div>
@@ -633,7 +622,33 @@
       document.getElementById("sub-1")
     ];
 
-    /* প্রতিটি ধাপের অটো-ক্যামেরা ফোকাস ও ১-লাইনের ছোট ক্যাপশন */
+    /* আপলোড করা whoosh.mp3.wav সাউন্ড সেটআপ */
+    const whooshAudio = new Audio("whoosh.mp3.wav");
+    whooshAudio.preload = "auto";
+    whooshAudio.volume = 0.75;
+    let audioUnlocked = false;
+    let hasInitialRendered = false;
+
+    function unlockSoundSystem() {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+      whooshAudio.play().then(() => {
+        whooshAudio.pause();
+        whooshAudio.currentTime = 0;
+      }).catch(() => {});
+    }
+
+    function playTransitionSound() {
+      if (isPaused || !audioUnlocked) return;
+      try {
+        whooshAudio.currentTime = 0;
+        const p = whooshAudio.play();
+        if (p && typeof p.catch === "function") {
+          p.catch(() => {});
+        }
+      } catch (_) {}
+    }
+
     const steps = [
       {
         focusX: 115,
@@ -756,6 +771,12 @@
       const stepObj = steps[currentStep];
       const activeNodeIdx = Math.min(currentStep, mainNodes.length - 1);
 
+      if (hasInitialRendered) {
+        playTransitionSound();
+      } else {
+        hasInitialRendered = true;
+      }
+
       mainNodes.forEach((node, i) => {
         if (currentStep === 4) {
           node.classList.remove("active");
@@ -830,9 +851,13 @@
     }
 
     function togglePause() {
+      unlockSoundSystem();
       isPaused = !isPaused;
       lastTick = performance.now();
       pausePill.classList.toggle("visible", isPaused);
+      if (!isPaused) {
+        playTransitionSound();
+      }
     }
 
     window.addEventListener("pointerdown", togglePause);
