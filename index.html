@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Per-Scene Digital Clock</title>
+  <title>n8n Style Workflow Reel • 1.80s Voice Offset Synced</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -102,15 +102,15 @@
     .mini-digital-clock {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: rgba(12, 15, 22, 0.95);
       border: 1px solid rgba(250, 204, 21, 0.55);
       color: #facc15;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
-      letter-spacing: 0.02em;
-      padding: 3px 10px;
+      letter-spacing: 0.01em;
+      padding: 3px 9px;
       border-radius: 999px;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
       white-space: nowrap;
@@ -120,8 +120,12 @@
       color: #38bdf8;
     }
 
-    .mini-digital-clock .clock-total-tag {
+    .mini-digital-clock .clock-voice-tag {
       color: #4ade80;
+    }
+
+    .mini-digital-clock .clock-file-tag {
+      color: #c084fc;
     }
 
     .three-title-bars {
@@ -961,7 +965,9 @@
         <span class="clock-scene-label" id="clockSceneLabel">সিন-১:</span>
         <span id="clockSceneTime">00.00s/2.25s</span>
         <span>•</span>
-        <span class="clock-total-tag" id="clockTotalTime">মোট 00.00s/12.50s</span>
+        <span class="clock-voice-tag" id="clockVoiceTime">ভয়েস 00.00s</span>
+        <span>•</span>
+        <span class="clock-file-tag" id="clockFileTime">ফাইল 00.00s</span>
       </div>
 
       <div class="three-title-bars" id="threeTitleBars">
@@ -1204,12 +1210,16 @@
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
 
+    // ভয়েস ফাইলের শুরুতে 1.80s ফাঁকা/নিঃশব্দ থাকায় আসল ভয়েস শুরু হয় 1.80s পরে
+    const VOICE_START_OFFSET_SEC = 1.80;
+
     // ব্যাকগ্রাউন্ড সাউন্ডের ভলিউম 25% (0.25)
     const BG_MUSIC_VOLUME = 0.25;
 
-    // ভয়েস টাইম টেবল: 2.25, 4.15, 6.5, 8, 11, 12.5
+    // আসল ভয়েস শুরু হওয়ার পর আপনার টাইম টেবল: 2.25, 4.15, 6.5, 8, 11, 12.5
     const VOICE_TIMETABLE_END_SEC = [2.25, 4.15, 6.50, 8.00, 11.00, 12.50];
-    const TOTAL_TIMETABLE_SEC = VOICE_TIMETABLE_END_SEC[VOICE_TIMETABLE_END_SEC.length - 1];
+    const TOTAL_VOICE_SEC = VOICE_TIMETABLE_END_SEC[VOICE_TIMETABLE_END_SEC.length - 1];
+    const TOTAL_CYCLE_SEC = VOICE_START_OFFSET_SEC + TOTAL_VOICE_SEC;
 
     const BN_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
     function toBnNum(numIndex) {
@@ -1243,7 +1253,8 @@
     const sheetRows = document.getElementById("sheetRows");
     const clockSceneLabel = document.getElementById("clockSceneLabel");
     const clockSceneTime = document.getElementById("clockSceneTime");
-    const clockTotalTime = document.getElementById("clockTotalTime");
+    const clockVoiceTime = document.getElementById("clockVoiceTime");
+    const clockFileTime = document.getElementById("clockFileTime");
 
     const tBars = [
       document.getElementById("tBar-0"),
@@ -1269,7 +1280,7 @@
     let audioUnlocked = false;
     let audioCtx = null;
     let hasInitialRendered = false;
-    let fallbackAudioSec = 0;
+    let fallbackFileSec = 0;
 
     const sceneConfigs = [
       {
@@ -1335,33 +1346,38 @@
       }
     ];
 
-    function updateDigitalClock(totalSec, stepIndex, sceneElapsedSec, sceneSpanSec) {
+    function updateDigitalClock(fileSec, voiceSec, stepIndex, sceneElapsedSec, sceneSpanSec) {
       clockSceneLabel.textContent = `সিন-${toBnNum(stepIndex)}:`;
       clockSceneTime.textContent = `${fmtSec(sceneElapsedSec)}/${fmtSec(sceneSpanSec)}`;
-      clockTotalTime.textContent = `মোট ${fmtSec(totalSec)}/${fmtSec(TOTAL_TIMETABLE_SEC)}`;
+      clockVoiceTime.textContent = `ভয়েস ${fmtSec(voiceSec)}`;
+      clockFileTime.textContent = `ফাইল ${fmtSec(fileSec)}`;
     }
 
-    function getCurrentVoiceTime(dtSec) {
+    function getCurrentFileTime(dtSec) {
       if (!voiceAudio.paused && !voiceAudio.ended && Number.isFinite(voiceAudio.currentTime)) {
-        fallbackAudioSec = voiceAudio.currentTime % TOTAL_TIMETABLE_SEC;
-        return fallbackAudioSec;
+        fallbackFileSec = voiceAudio.currentTime % TOTAL_CYCLE_SEC;
+        return fallbackFileSec;
       }
       if (!isPaused && !audioUnlocked) {
-        fallbackAudioSec = (fallbackAudioSec + dtSec) % TOTAL_TIMETABLE_SEC;
+        fallbackFileSec = (fallbackFileSec + dtSec) % TOTAL_CYCLE_SEC;
       }
-      return fallbackAudioSec;
+      return fallbackFileSec;
     }
 
-    function resolveStepFromTime(currentSec) {
+    function resolveStepFromFileTime(fileSec) {
+      // 0.00s থেকে 1.80s পর্যন্ত ভয়েস শুরু হওয়ার অপেক্ষা; এরপর আসল ভয়েস সময় গণনা শুরু
+      const effectiveVoiceSec = Math.max(0, fileSec - VOICE_START_OFFSET_SEC);
+
       for (let i = 0; i < sceneConfigs.length; i++) {
         const s = sceneConfigs[i];
         const isLast = i === sceneConfigs.length - 1;
-        if (currentSec >= s.startSec && (currentSec < s.endSec || isLast)) {
+        if (effectiveVoiceSec >= s.startSec && (effectiveVoiceSec < s.endSec || isLast)) {
           const spanSec = Math.max(0.001, s.endSec - s.startSec);
-          const sceneElapsedSec = Math.max(0, Math.min(spanSec, currentSec - s.startSec));
+          const sceneElapsedSec = Math.max(0, Math.min(spanSec, effectiveVoiceSec - s.startSec));
           const stepProgress = sceneElapsedSec / spanSec;
           return {
             stepIndex: i,
+            voiceSec: effectiveVoiceSec,
             stepProgress,
             sceneElapsedSec,
             sceneSpanSec: spanSec,
@@ -1369,10 +1385,12 @@
           };
         }
       }
+
       const last = sceneConfigs[sceneConfigs.length - 1];
       const spanSec = Math.max(0.001, last.endSec - last.startSec);
       return {
         stepIndex: sceneConfigs.length - 1,
+        voiceSec: effectiveVoiceSec,
         stepProgress: 1,
         sceneElapsedSec: spanSec,
         sceneSpanSec: spanSec,
@@ -1393,7 +1411,7 @@
         try {
           voiceAudio.currentTime = 0;
           bgMusic.currentTime = 0;
-          fallbackAudioSec = 0;
+          fallbackFileSec = 0;
         } catch (_) {}
       }
 
@@ -1657,7 +1675,14 @@
       });
     }
 
-    function syncVisualsToProgress(stepObj, progress, elapsedMs) {
+    function syncVisualsToProgress(stepObj, progress, elapsedMs, isBeforeVoiceStart) {
+      if (isBeforeVoiceStart) {
+        saroarQueryText.textContent = "";
+        saroarResultPopup.classList.remove("visible");
+        wordEls.forEach((el) => el.classList.remove("active"));
+        return;
+      }
+
       const typingProgress = Math.min(1, progress / 0.36);
       const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
       saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
@@ -1697,22 +1722,29 @@
       lastTick = now;
 
       if (!isPaused) {
-        const currentSec = getCurrentVoiceTime(dt / 1000);
-        const resolved = resolveStepFromTime(currentSec);
+        const currentFileSec = getCurrentFileTime(dt / 1000);
+        const resolved = resolveStepFromFileTime(currentFileSec);
+        const isBeforeVoiceStart = currentFileSec < VOICE_START_OFFSET_SEC;
 
         if (resolved.stepIndex !== currentStep) {
           setStep(resolved.stepIndex);
         }
 
         updateDigitalClock(
-          currentSec,
+          currentFileSec,
+          resolved.voiceSec,
           resolved.stepIndex,
           resolved.sceneElapsedSec,
           resolved.sceneSpanSec
         );
 
         const stepObj = sceneConfigs[currentStep];
-        syncVisualsToProgress(stepObj, resolved.stepProgress, resolved.stepElapsedMs);
+        syncVisualsToProgress(
+          stepObj,
+          resolved.stepProgress,
+          resolved.stepElapsedMs,
+          isBeforeVoiceStart
+        );
 
         for (const p of pulses) {
           const w = wiresData[p.wireIdx];
@@ -1755,11 +1787,12 @@
     });
 
     voiceAudio.addEventListener("loadedmetadata", () => {
-      const currentSec = (voiceAudio.currentTime || 0) % TOTAL_TIMETABLE_SEC;
-      const resolved = resolveStepFromTime(currentSec);
+      const currentFileSec = (voiceAudio.currentTime || 0) % TOTAL_CYCLE_SEC;
+      const resolved = resolveStepFromFileTime(currentFileSec);
       setStep(resolved.stepIndex);
       updateDigitalClock(
-        currentSec,
+        currentFileSec,
+        resolved.voiceSec,
         resolved.stepIndex,
         resolved.sceneElapsedSec,
         resolved.sceneSpanSec
@@ -1770,24 +1803,30 @@
       if (Number.isFinite(bgMusic.duration) && bgMusic.duration > 0) {
         bgMusic.currentTime = voiceAudio.currentTime % bgMusic.duration;
       }
-      const currentSec = (voiceAudio.currentTime || 0) % TOTAL_TIMETABLE_SEC;
-      const resolved = resolveStepFromTime(currentSec);
+      const currentFileSec = (voiceAudio.currentTime || 0) % TOTAL_CYCLE_SEC;
+      const resolved = resolveStepFromFileTime(currentFileSec);
       setStep(resolved.stepIndex);
       updateDigitalClock(
-        currentSec,
+        currentFileSec,
+        resolved.voiceSec,
         resolved.stepIndex,
         resolved.sceneElapsedSec,
         resolved.sceneSpanSec
       );
-      syncVisualsToProgress(sceneConfigs[currentStep], resolved.stepProgress, resolved.stepElapsedMs);
+      syncVisualsToProgress(
+        sceneConfigs[currentStep],
+        resolved.stepProgress,
+        resolved.stepElapsedMs,
+        currentFileSec < VOICE_START_OFFSET_SEC
+      );
     });
 
     window.addEventListener("resize", () => moveCameraToStep(sceneConfigs[currentStep]));
 
     initSvgWires();
     setStep(0);
-    const initRes = resolveStepFromTime(0);
-    updateDigitalClock(0, 0, initRes.sceneElapsedSec, initRes.sceneSpanSec);
+    const initRes = resolveStepFromFileTime(0);
+    updateDigitalClock(0, initRes.voiceSec, 0, initRes.sceneElapsedSec, initRes.sceneSpanSec);
     requestAnimationFrame(animate);
   </script>
 </body>
