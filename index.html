@@ -46,12 +46,12 @@
       position: relative;
       z-index: 10;
       width: min(96vw, calc(96vh * 9 / 16));
-      height: min(96vh, calc(96vw * 16 / 9));
+      height: min(94vh, calc(96vw * 16 / 9));
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 10px 22px;
+      padding: 18px 14px 38px;
       pointer-events: none;
       overflow: visible;
     }
@@ -103,11 +103,11 @@
       flex-shrink: 0;
       transform-origin: center center;
       transform: translate(0px, 0px) scale(0.45);
-      transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: transform;
     }
 
-    /* SVG তার ও পালস লেয়ার */
+    /* SVG তার ও পালস লেয়ার */
     .wires-svg {
       position: absolute;
       inset: 0;
@@ -376,36 +376,39 @@
       font-weight: 700;
     }
 
-    /* নিচে এক লাইনে বড় হলুদ কারাওকে ক্যাপশন */
+    /* নিচে সম্পূর্ণ দৃশ্যমান কারাওকে ক্যাপশন বক্স */
     .karaoke-box {
       position: relative;
-      z-index: 20;
+      z-index: 25;
       width: 100%;
+      min-height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: transparent;
-      padding: 4px 2px;
-      overflow: hidden;
+      padding: 6px 8px;
+      margin-bottom: 6px;
+      overflow: visible;
     }
 
     .karaoke-line {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 4px 5px;
-      font-size: clamp(20px, 2.9vh, 28px);
+      gap: 6px 6px;
+      max-width: 100%;
+      font-size: clamp(16px, 2.3vh, 22px);
       font-weight: 800;
-      line-height: 1.35;
-      white-space: nowrap;
+      line-height: 1.45;
+      text-align: center;
     }
 
     .k-word {
       color: #ffffff;
-      padding: 3px 7px;
+      padding: 4px 8px;
       border-radius: 6px;
-      background: rgba(11, 13, 19, 0.65);
+      background: rgba(11, 13, 19, 0.78);
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
       transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
     }
@@ -414,7 +417,7 @@
       background: #facc15;
       color: #090d16;
       text-shadow: none;
-      transform: scale(1.06);
+      transform: scale(1.05);
     }
 
     .pause-pill {
@@ -622,12 +625,13 @@
       document.getElementById("sub-1")
     ];
 
-    /* আপলোড করা whoosh.mp3.wav সাউন্ড সেটআপ */
+    /* সাউন্ড সেটআপ (সিন ট্রানজিশন + শব্দ পরিবর্তনের সূক্ষ্ম অ্যাডজাস্টমেন্ট) */
     const whooshAudio = new Audio("whoosh.mp3.wav");
     whooshAudio.preload = "auto";
-    whooshAudio.volume = 0.75;
+    whooshAudio.volume = 0.65;
     let audioUnlocked = false;
     let hasInitialRendered = false;
+    let lastHighlightedWordIdx = -1;
 
     function unlockSoundSystem() {
       if (audioUnlocked) return;
@@ -638,10 +642,13 @@
       }).catch(() => {});
     }
 
-    function playTransitionSound() {
+    function playTransitionSound(vol = 0.65, rate = 1.0) {
       if (isPaused || !audioUnlocked) return;
       try {
+        whooshAudio.pause();
         whooshAudio.currentTime = 0;
+        whooshAudio.volume = vol;
+        whooshAudio.playbackRate = rate;
         const p = whooshAudio.play();
         if (p && typeof p.catch === "function") {
           p.catch(() => {});
@@ -649,47 +656,48 @@
       } catch (_) {}
     }
 
+    /* মোট ৫টি সিন: প্রতিটি সিনে ৫০০০ms (৫ সেকেন্ড) করে সময় বাড়ানো হয়েছে */
     const steps = [
       {
         focusX: 115,
         focusY: 165,
         zoom: 1.18,
-        duration: 3600,
-        words: ["ফর্ম", "আসলেই", "অটোমেশন", "শুরু", "হয়।"]
+        duration: 8600,
+        words: ["ফর্ম", "আসলেই", "অটোমেশন", "শুরু", "হয়।"]
       },
       {
         focusX: 295,
         focusY: 165,
         zoom: 1.18,
-        duration: 3600,
-        words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে।"]
+        duration: 8600,
+        words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে।"]
       },
       {
         focusX: 545,
         focusY: 225,
         zoom: 1.05,
-        duration: 4000,
-        words: ["AI", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়।"]
+        duration: 9000,
+        words: ["AI", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়।"]
       },
       {
         focusX: 790,
         focusY: 215,
         zoom: 1.08,
-        duration: 3800,
-        words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়।"]
+        duration: 8800,
+        words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়।"]
       },
       {
         focusX: 465,
         focusY: 210,
         zoom: 0.56,
-        duration: 4200,
+        duration: 9200,
         words: ["পুরো", "n8n", "ফ্লো", "একদম", "রেডি!"]
       }
     ];
 
     const sampleLeads = [
       { name: "তানভীর", intent: "Booking", status: "Saved ✓" },
-      { name: "সুমাইয়া", intent: "Support", status: "Synced ✓" },
+      { name: "সুমাইয়া", intent: "Support", status: "Synced ✓" },
       { name: "আরিফ", intent: "Quote", status: "Done ✓" }
     ];
 
@@ -737,7 +745,7 @@
             wireIdx: idx,
             el: dot,
             t: cIdx * 0.5,
-            speed: spec.sub ? 0.007 : 0.0065
+            speed: spec.sub ? 0.006 : 0.0055
           });
         });
       });
@@ -768,11 +776,12 @@
 
     function setStep(idx) {
       currentStep = idx;
+      lastHighlightedWordIdx = -1;
       const stepObj = steps[currentStep];
       const activeNodeIdx = Math.min(currentStep, mainNodes.length - 1);
 
       if (hasInitialRendered) {
-        playTransitionSound();
+        playTransitionSound(0.65, 1.0);
       } else {
         hasInitialRendered = true;
       }
@@ -830,6 +839,14 @@
             wordEls.length - 1,
             Math.floor(progress * wordEls.length)
           );
+
+          if (activeWord !== lastHighlightedWordIdx) {
+            lastHighlightedWordIdx = activeWord;
+            if (activeWord > 0) {
+              playTransitionSound(0.18, 1.25);
+            }
+          }
+
           wordEls.forEach((el, i) => {
             el.classList.toggle("active", i === activeWord);
           });
@@ -855,8 +872,10 @@
       isPaused = !isPaused;
       lastTick = performance.now();
       pausePill.classList.toggle("visible", isPaused);
-      if (!isPaused) {
-        playTransitionSound();
+      if (isPaused) {
+        whooshAudio.pause();
+      } else {
+        playTransitionSound(0.65, 1.0);
       }
     }
 
