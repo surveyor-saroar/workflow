@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • 9:16 Auto Camera & Scene 6 Intro</title>
+  <title>n8n Style Workflow Reel • Stable Live Recovery</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -97,7 +97,6 @@
       gap: 9px;
     }
 
-    /* উপরে ৩টি টাইটেল বার */
     .three-title-bars {
       width: 100%;
       max-width: 390px;
@@ -256,4 +255,1287 @@
       background: linear-gradient(90deg, #2563eb, #0ea5e9);
       padding: 3px 9px;
       border-radius: 6px;
-      flex
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.35);
+      animation: saroarBadgePulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes saroarBadgePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .saroar-typing-text {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: #facc15;
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: cursorBlink 0.65s steps(1) infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .saroar-result-popup {
+      background: rgba(24, 28, 38, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.45);
+      border-left: 3px solid #facc15;
+      border-radius: 10px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #e2e8f0;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+      transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .saroar-result-popup.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .saroar-result-tag {
+      color: #facc15;
+      font-weight: 800;
+      margin-right: 4px;
+    }
+
+    .camera-viewport {
+      position: relative;
+      z-index: 12;
+      width: 100%;
+      flex: 1;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .n8n-canvas {
+      position: relative;
+      z-index: 14;
+      width: 920px;
+      height: 440px;
+      flex-shrink: 0;
+      opacity: 1;
+      transform-origin: center center;
+      transform: translate(0px, 0px) scale(0.45);
+      transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+      will-change: transform;
+    }
+
+    .n8n-canvas.hidden-for-intro {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .wires-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: visible;
+    }
+
+    .n8n-wire {
+      fill: none;
+      stroke: #475569;
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition: stroke 0.35s ease, stroke-width 0.35s ease;
+    }
+
+    .n8n-wire.sub-wire {
+      stroke-dasharray: 6 6;
+      stroke-width: 2.4;
+      stroke: #64748b;
+    }
+
+    .n8n-wire.active-wire {
+      stroke: url(#n8nGrad);
+      stroke-width: 4;
+    }
+
+    .wire-pulse {
+      r: 6;
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+
+    .n8n-node {
+      position: absolute;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.35s ease;
+    }
+
+    .node-box {
+      position: relative;
+      width: 104px;
+      height: 104px;
+      border-radius: 24px;
+      background: #1e212b;
+      border: 2px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+      transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease, transform 0.35s ease;
+    }
+
+    .n8n-node.agent-node .node-box {
+      width: 230px;
+      height: 104px;
+      padding: 0 18px;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+
+    .n8n-node.sub-node .node-box {
+      width: 74px;
+      height: 74px;
+      border-radius: 999px;
+      background: #191c24;
+    }
+
+    .n8n-node.active .node-box {
+      background: #232734;
+      border-color: #40C9FF;
+      box-shadow:
+        0 0 0 4px rgba(64, 201, 255, 0.18),
+        0 0 28px rgba(232, 28, 255, 0.28),
+        0 16px 34px rgba(0, 0, 0, 0.65);
+      transform: scale(1.05);
+    }
+
+    .n8n-node.done .node-box {
+      border-color: #22c55e;
+    }
+
+    .port {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: #94a3b8;
+      border: 2.5px solid #111318;
+      z-index: 5;
+    }
+
+    .port.in { left: -7px; top: 50%; transform: translateY(-50%); }
+    .port.out { right: -7px; top: 50%; transform: translateY(-50%); }
+    .port.bottom-1 { bottom: -7px; left: 34%; transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
+    .port.bottom-2 { bottom: -7px; left: 66%; transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
+    .port.top { top: -7px; left: 50%; transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
+
+    .n8n-node.active .port,
+    .n8n-node.done .port {
+      background: #22c55e;
+    }
+
+    .node-check {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: #22c55e;
+      color: #052e16;
+      font-size: 15px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.5);
+      opacity: 0;
+      transform: scale(0.4);
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .n8n-node.active .node-check,
+    .n8n-node.done .node-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .icon-wrap {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sub-node .icon-wrap {
+      width: 38px;
+      height: 38px;
+    }
+
+    .icon-wrap svg {
+      width: 29px;
+      height: 29px;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    .sub-node .icon-wrap svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .ic-orange svg { animation: iconBoltBounce 2.2s ease-in-out infinite; }
+    .ic-blue svg   { animation: iconFilterSwing 2.6s ease-in-out infinite; }
+    .ic-purple svg { animation: iconAgentFloat 2.2s ease-in-out infinite; }
+    .ic-cyan svg   { animation: iconSparkSpin 4.2s linear infinite; }
+    .sub-node .ic-purple svg { animation: iconMemoryPulse 2.5s ease-in-out infinite; }
+    .ic-green svg  { animation: iconSheetBeat 2.1s ease-in-out infinite; }
+
+    @keyframes iconBoltBounce {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-3px) scale(1.14); }
+    }
+    @keyframes iconFilterSwing {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(-9deg) scale(1.06); }
+      75% { transform: rotate(9deg) scale(1.06); }
+    }
+    @keyframes iconAgentFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-3.5px) scale(1.08); }
+    }
+    @keyframes iconSparkSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    @keyframes iconMemoryPulse {
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      50% { transform: scaleY(1.12) scaleX(0.95); }
+    }
+    @keyframes iconSheetBeat {
+      0%, 100% { transform: scale(1); }
+      35% { transform: scale(1.13); }
+      70% { transform: scale(0.97); }
+    }
+
+    .ic-orange { background: rgba(249, 115, 22, 0.18); color: #fb923c; }
+    .ic-blue   { background: rgba(56, 189, 248, 0.18); color: #38bdf8; }
+    .ic-purple { background: rgba(192, 132, 252, 0.2);  color: #c084fc; }
+    .ic-green  { background: rgba(34, 197, 94, 0.18);  color: #4ade80; }
+    .ic-cyan   { background: rgba(64, 201, 255, 0.18);  color: #40C9FF; }
+
+    .agent-inner-text { text-align: left; }
+    .agent-inner-title { font-size: 17px; font-weight: 800; color: #f8fafc; }
+    .agent-inner-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+
+    .node-label { margin-top: 10px; text-align: center; white-space: nowrap; }
+    .node-name { font-size: 15px; font-weight: 800; color: #f1f5f9; }
+    .node-role { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+    .sub-node .node-name { font-size: 13px; }
+
+    .sheet-card {
+      margin-top: 10px;
+      width: 215px;
+      background: rgba(22, 25, 34, 0.95);
+      border: 1px solid rgba(74, 222, 128, 0.35);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .sheet-card table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .sheet-card th, .sheet-card td { padding: 5px 8px; text-align: left; border-bottom: 1px solid rgba(148, 163, 184, 0.14); }
+    .sheet-card th { background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight: 800; }
+    .sheet-card tr.flash-row { background: rgba(34, 197, 94, 0.22); color: #dcfce7; font-weight: 700; }
+
+    .scene6-intro-stage {
+      position: absolute;
+      inset: 0;
+      z-index: 18;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 10px 8px;
+    }
+
+    .scene6-intro-stage.active {
+      display: flex;
+      animation: s6FadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes s6FadeIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .s6-intro-heading {
+      background: rgba(24, 28, 38, 0.92);
+      border: 1px solid rgba(250, 204, 21, 0.45);
+      color: #facc15;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 5px 14px;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+    }
+
+    .s6-cards-row {
+      position: relative;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .s6-card {
+      position: relative;
+      background: rgba(24, 28, 38, 0.94);
+      border: 1.5px solid rgba(148, 163, 184, 0.28);
+      border-radius: 16px;
+      padding: 12px 8px;
+      min-height: 158px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      text-align: center;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5);
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .s6-photo-circle {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2.5px solid #facc15;
+      box-shadow: 0 6px 18px rgba(250, 204, 21, 0.28);
+      background: #0f172a;
+    }
+
+    .s6-photo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .s6-profile-name {
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+
+    .s6-profile-role {
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .s6-bell-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.22s ease, transform 0.25s ease;
+    }
+
+    .s6-bell-view.hide {
+      opacity: 0;
+      transform: scale(0.65);
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .s6-follow-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: #facc15;
+      color: #090d16;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 9px 12px;
+      border-radius: 999px;
+      box-shadow: 0 8px 20px rgba(250, 204, 21, 0.42);
+      transform: scale(0.6);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+    }
+
+    .s6-follow-btn.show {
+      display: inline-flex;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .s6-card-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .s6-card-sub {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .s6-card.share-active {
+      border-color: #4ade80;
+      background: rgba(16, 54, 42, 0.92);
+      transform: scale(1.04);
+    }
+
+    .s6-card.share-active .s6-card-sub {
+      color: #4ade80;
+      font-weight: 800;
+    }
+
+    .s6-mouse-cursor {
+      position: absolute;
+      left: 50%;
+      top: 56%;
+      width: 30px;
+      height: 30px;
+      z-index: 35;
+      pointer-events: none;
+      opacity: 0;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.75));
+    }
+
+    .scene6-intro-stage.active .s6-mouse-cursor {
+      animation: s6MouseSequence 3.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+    }
+
+    @keyframes s6MouseSequence {
+      0% { opacity: 0; transform: translate3d(-240px, 8px, 0) scale(1); }
+      18% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
+      24% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(0.8); }
+      30% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
+      55% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
+      61% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(0.8); }
+      67% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
+      88% { opacity: 0.7; transform: translate3d(220px, -28px, 0) scale(0.92); }
+      100% { opacity: 0; transform: translate3d(265px, -45px, 0) scale(0.85); }
+    }
+
+    .s6-ripple {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2.5px solid #facc15;
+      transform: translate(-50%, -50%) scale(0.2);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .s6-ripple.bell-r.fire {
+      animation: s6RippleAnim 0.55s ease-out forwards;
+    }
+
+    .s6-ripple.share-r.fire {
+      border-color: #4ade80;
+      animation: s6RippleAnim 0.55s ease-out forwards;
+    }
+
+    @keyframes s6RippleAnim {
+      0% { opacity: 0.95; transform: translate(-50%, -50%) scale(0.25); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(2.4); }
+    }
+
+    .karaoke-box {
+      position: relative;
+      z-index: 25;
+      width: 100%;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      overflow: visible;
+    }
+
+    .karaoke-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 6px 6px;
+      max-width: 100%;
+      font-size: clamp(15.5px, 2.2vh, 21px);
+      font-weight: 800;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .k-word {
+      position: relative;
+      z-index: 1;
+      color: #ffffff;
+      padding: 4px 8px;
+      border-radius: 7px;
+      background: rgba(11, 13, 19, 0.78);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+      overflow: hidden;
+      transition: color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .k-word::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: #facc15;
+      border-radius: 7px;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .k-word::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      bottom: 2px;
+      height: 3px;
+      border-radius: 99px;
+      background: #fde047;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .k-word.active {
+      color: #090d16;
+      text-shadow: none;
+      transform: scale(1.07);
+      box-shadow: 0 4px 16px rgba(250, 204, 21, 0.45);
+    }
+
+    .k-word.active::before {
+      transform: scaleX(1);
+    }
+
+    .k-word.active::after {
+      opacity: 1;
+    }
+
+    .pause-pill {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 30;
+      font-size: 12px;
+      font-weight: 800;
+      color: #090d16;
+      background: linear-gradient(90deg, #40C9FF, #E81CFF);
+      padding: 6px 14px;
+      border-radius: 999px;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+    }
+
+    .pause-pill.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-ambient-bg" id="sceneAmbientBg"></div>
+  <div class="n8n-dots-bg"></div>
+  <div class="pause-pill" id="pausePill">PAUSED • ট্যাপ করে চালান</div>
+
+  <div class="stage-9x16">
+    <div class="top-stack">
+      <div class="three-title-bars" id="threeTitleBars">
+        <div class="title-bar-item active" id="tBar-0">১. ফর্ম ও ফিল্টার</div>
+        <div class="title-bar-item" id="tBar-1">২. AI ও শিট</div>
+        <div class="title-bar-item" id="tBar-2">৩. আমার পরিচিতি</div>
+      </div>
+
+      <div class="top-pill show-title" id="topTitlePill">
+        <span class="live-dot"></span>
+        <span>n8n AI <span class="title-highlight-words">Lead Automation</span></span>
+      </div>
+
+      <div class="saroar-widget">
+        <div class="saroar-search-bar">
+          <div class="saroar-avatar-circle">
+            <img id="saroarCirclePhoto" src="saroar01.png" alt="Saroar" onerror="this.style.display='none';" />
+          </div>
+          <span class="saroar-badge">saroar</span>
+          <div class="saroar-typing-text">
+            <span id="saroarQueryText"></span><span class="typing-cursor"></span>
+          </div>
+        </div>
+        <div class="saroar-result-popup" id="saroarResultPopup">
+          <span class="saroar-result-tag">✓ saroar AI:</span>
+          <span id="saroarResultText"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="camera-viewport" id="cameraViewport">
+      <div class="n8n-canvas" id="n8nCanvas">
+        <svg class="wires-svg" id="wiresSvg" viewBox="0 0 920 440">
+          <defs>
+            <linearGradient id="n8nGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#40C9FF" />
+              <stop offset="100%" stop-color="#E81CFF" />
+            </linearGradient>
+          </defs>
+          <g id="wiresLayer"></g>
+          <g id="pulsesLayer"></g>
+        </svg>
+
+        <div class="n8n-node active" id="node-0" style="left: 36px; top: 96px;">
+          <div class="node-box">
+            <div class="node-check">✓</div>
+            <div class="icon-wrap ic-orange">
+              <svg stroke="currentColor" viewBox="0 0 24 24">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <div class="port out"></div>
+          </div>
+          <div class="node-label">
+            <div class="node-name">On Form Submit</div>
+            <div class="node-role">Webhook Trigger</div>
+          </div>
+        </div>
+
+        <div class="n8n-node" id="node-1" style="left: 230px; top: 96px;">
+          <div class="node-box">
+            <div class="node-check">✓</div>
+            <div class="port in"></div>
+            <div class="icon-wrap ic-blue">
+              <svg stroke="currentColor" viewBox="0 0 24 24">
+                <line x1="4" y1="6" x2="20" y2="6"></line>
+                <line x1="7" y1="12" x2="17" y2="12"></line>
+                <line x1="10" y1="18" x2="14" y2="18"></line>
+              </svg>
+            </div>
+            <div class="port out"></div>
+          </div>
+          <div class="node-label">
+            <div class="node-name">Intent Filter</div>
+            <div class="node-role">Lead Qualification</div>
+          </div>
+        </div>
+
+        <div class="n8n-node agent-node" id="node-2" style="left: 430px; top: 96px;">
+          <div class="node-box">
+            <div class="node-check">✓</div>
+            <div class="port in"></div>
+            <div class="icon-wrap ic-purple">
+              <svg stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"></path>
+                <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z"></path>
+              </svg>
+            </div>
+            <div class="agent-inner-text">
+              <div class="agent-inner-title">AI Agent</div>
+              <div class="agent-inner-sub">Tools Agent • Auto Reply</div>
+            </div>
+            <div class="port out"></div>
+            <div class="port bottom-1"></div>
+            <div class="port bottom-2"></div>
+          </div>
+          <div class="node-label">
+            <div class="node-name">Smart AI Processor</div>
+            <div class="node-role">Context + Memory</div>
+          </div>
+        </div>
+
+        <div class="n8n-node sub-node" id="sub-0" style="left: 446px; top: 285px;">
+          <div class="node-box">
+            <div class="port top"></div>
+            <div class="icon-wrap ic-cyan">
+              <svg stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <circle cx="9" cy="10" r="1"></circle>
+                <circle cx="12" cy="10" r="1"></circle>
+                <circle cx="15" cy="10" r="1"></circle>
+              </svg>
+            </div>
+          </div>
+          <div class="node-label">
+            <div class="node-name">Chat Model</div>
+          </div>
+        </div>
+
+        <div class="n8n-node sub-node" id="sub-1" style="left: 568px; top: 285px;">
+          <div class="node-box">
+            <div class="port top"></div>
+            <div class="icon-wrap ic-purple">
+              <svg stroke="currentColor" viewBox="0 0 24 24">
+                <rect x="7" y="7" width="10" height="10" rx="2"></rect>
+                <path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="node-label">
+            <div class="node-name">Memory</div>
+          </div>
+        </div>
+
+        <div class="n8n-node" id="node-3" style="left: 715px; top: 96px;">
+          <div class="node-box">
+            <div class="node-check">✓</div>
+            <div class="port in"></div>
+            <div class="icon-wrap ic-green">
+              <svg stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="8" y1="13" x2="16" y2="13"></line>
+                <line x1="8" y1="17" x2="16" y2="17"></line>
+              </svg>
+            </div>
+          </div>
+          <div class="node-label">
+            <div class="node-name">Google Sheets</div>
+            <div class="node-role">Append Row</div>
+          </div>
+          <div class="sheet-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Intent</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="sheetRows">
+                <tr>
+                  <td>রাকিব</td>
+                  <td>Order</td>
+                  <td style="color:#4ade80;font-weight:800;">Done ✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene6-intro-stage" id="scene6IntroStage">
+        <div class="s6-intro-heading">আমার পরিচিতি • Saroar Alam Saboj</div>
+        <div class="s6-cards-row">
+          <div class="s6-card">
+            <div class="s6-photo-circle">
+              <img id="s6ProfilePhoto" src="saroar01.png" alt="Saroar Alam Saboj" onerror="this.style.display='none';" />
+            </div>
+            <div class="s6-profile-name">Saroar Alam Saboj</div>
+            <div class="s6-profile-role">Automation & Web Creator</div>
+          </div>
+
+          <div class="s6-card" id="s6BellCard">
+            <div class="s6-ripple bell-r" id="s6BellRipple"></div>
+            <div class="s6-bell-view" id="s6BellView">
+              <div class="icon-wrap ic-orange" style="width:46px;height:46px;border-radius:50%;">
+                <svg stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </div>
+              <div class="s6-card-title">রিং বেল</div>
+              <div class="s6-card-sub">আপডেট চালু রাখুন</div>
+            </div>
+            <div class="s6-follow-btn" id="s6FollowBtn">
+              <span>✓</span>
+              <span>ফলো করুন</span>
+            </div>
+          </div>
+
+          <div class="s6-card" id="s6ShareCard">
+            <div class="s6-ripple share-r" id="s6ShareRipple"></div>
+            <div class="icon-wrap ic-cyan" style="width:46px;height:46px;border-radius:50%;">
+              <svg stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+            </div>
+            <div class="s6-card-title">শেয়ার করুন</div>
+            <div class="s6-card-sub" id="s6ShareSub">বন্ধুদের পাঠান</div>
+          </div>
+
+          <svg class="s6-mouse-cursor" id="s6MouseCursor" viewBox="0 0 36 36" fill="none">
+            <path d="M9 5L9 27L15.2 21.4L19.8 31L24.2 28.9L19.6 19.4L27.5 19.4L9 5Z" fill="#ffffff" stroke="#090d16" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="karaoke-box">
+      <div class="karaoke-line" id="karaokeLine"></div>
+    </div>
+  </div>
+
+  <script>
+    const SAROAR_PHOTO_URL = "saroar01.png";
+    document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
+    document.getElementById("s6ProfilePhoto").src = SAROAR_PHOTO_URL;
+
+    const viewport = document.getElementById("cameraViewport");
+    const canvas = document.getElementById("n8nCanvas");
+    const scene6IntroStage = document.getElementById("scene6IntroStage");
+    const sceneAmbientBg = document.getElementById("sceneAmbientBg");
+    const topTitlePill = document.getElementById("topTitlePill");
+    const saroarQueryText = document.getElementById("saroarQueryText");
+    const saroarResultPopup = document.getElementById("saroarResultPopup");
+    const saroarResultText = document.getElementById("saroarResultText");
+    const wiresLayer = document.getElementById("wiresLayer");
+    const pulsesLayer = document.getElementById("pulsesLayer");
+    const karaokeLine = document.getElementById("karaokeLine");
+    const pausePill = document.getElementById("pausePill");
+    const sheetRows = document.getElementById("sheetRows");
+
+    const tBars = [
+      document.getElementById("tBar-0"),
+      document.getElementById("tBar-1"),
+      document.getElementById("tBar-2")
+    ];
+
+    const mainNodes = [
+      document.getElementById("node-0"),
+      document.getElementById("node-1"),
+      document.getElementById("node-2"),
+      document.getElementById("node-3")
+    ];
+    const subNodes = [
+      document.getElementById("sub-0"),
+      document.getElementById("sub-1")
+    ];
+
+    const whooshAudio = new Audio("whoosh.mp3.wav");
+    whooshAudio.preload = "auto";
+    whooshAudio.volume = 0.75;
+
+    let audioUnlocked = false;
+    let audioCtx = null;
+    let hasInitialRendered = false;
+
+    function unlockSoundSystem() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+      if (!audioUnlocked) {
+        audioUnlocked = true;
+        whooshAudio.play().then(() => {
+          whooshAudio.pause();
+          whooshAudio.currentTime = 0;
+        }).catch(() => {});
+      }
+    }
+
+    function playTransitionSound() {
+      if (isPaused || !audioUnlocked) return;
+      try {
+        whooshAudio.pause();
+        whooshAudio.currentTime = 0;
+        whooshAudio.volume = 0.75;
+        whooshAudio.playbackRate = 1.0;
+        const p = whooshAudio.play();
+        if (p && typeof p.catch === "function") {
+          p.catch(() => {});
+        }
+      } catch (_) {}
+    }
+
+    function playClickSound(pitch = 780) {
+      if (isPaused) return;
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (!audioCtx) return;
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(pitch, now);
+      osc.frequency.exponentialRampToValueAtTime(280, now + 0.085);
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.18, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.095);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    }
+
+    const steps = [
+      {
+        focusX: 115, focusY: 165, zoom: 1.18, duration: 3000, barGroup: 0,
+        bgColor1: "rgba(251, 146, 60, 0.17)", bgPos1: "28% 28%",
+        bgColor2: "rgba(64, 201, 255, 0.16)", bgPos2: "64% 56%",
+        saroarQuery: "লিড ফর্ম সাবমিট হলে কী হবে?",
+        saroarResult: "Webhook সাথে সাথে ওয়ার্কফ্লো ট্রিগার করবে",
+        words: ["ফর্ম", "আসলেই", "অটোমেশন", "শুরু", "হয়।"]
+      },
+      {
+        focusX: 295, focusY: 165, zoom: 1.18, duration: 3000, barGroup: 0,
+        bgColor1: "rgba(56, 189, 248, 0.18)", bgPos1: "35% 32%",
+        bgColor2: "rgba(129, 140, 248, 0.16)", bgPos2: "65% 58%",
+        saroarQuery: "কীভাবে সঠিক ক্লায়েন্ট বাছাই হবে?",
+        saroarResult: "Intent Filter আসল লিড আলাদা করবে",
+        words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে।"]
+      },
+      {
+        focusX: 545, focusY: 225, zoom: 1.05, duration: 3000, barGroup: 1,
+        bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
+        bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
+        saroarQuery: "ক্লায়েন্টকে উত্তর দেবে কে?",
+        saroarResult: "AI Agent + Memory স্মার্ট রিপ্লাই তৈরি করবে",
+        words: ["AI", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়।"]
+      },
+      {
+        focusX: 790, focusY: 215, zoom: 1.08, duration: 3000, barGroup: 1,
+        bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
+        bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
+        saroarQuery: "লিডের তথ্য কোথায় জমা থাকবে?",
+        saroarResult: "Google Sheets-এ অটোমেটিক নতুন রো যুক্ত হবে",
+        words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়।"]
+      },
+      {
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 3000, barGroup: 1,
+        bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
+        bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
+        saroarQuery: "n8n AI Lead Automation স্ট্যাটাস?",
+        saroarResult: "১০০% অটোমেটেড লিড ফ্লো এখন সক্রিয়!",
+        words: ["পুরো", "n8n", "ফ্লো", "একদম", "রেডি!"]
+      },
+      {
+        isIntroScene: true,
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 4200, barGroup: 2,
+        bgColor1: "rgba(250, 204, 21, 0.18)", bgPos1: "25% 30%",
+        bgColor2: "rgba(64, 201, 255, 0.18)", bgPos2: "72% 60%",
+        saroarQuery: "আমার পরিচিতি — Saroar Alam Saboj",
+        saroarResult: "ফলো করুন ও বন্ধুদের সাথে শেয়ার করুন!",
+        words: ["আমি", "সরোয়ার", "সবুজ।", "ফলো", "ও", "শেয়ার", "করুন!"]
+      }
+    ];
+
+    function applySceneBackground(stepObj) {
+      sceneAmbientBg.style.background = `
+        radial-gradient(circle at ${stepObj.bgPos1}, ${stepObj.bgColor1}, transparent 46%),
+        radial-gradient(circle at ${stepObj.bgPos2}, ${stepObj.bgColor2}, transparent 50%),
+        #111318
+      `;
+    }
+
+    function updateThreeTitleBars(barGroup) {
+      tBars.forEach((bar, i) => {
+        bar.classList.remove("active", "done");
+        if (i < barGroup) bar.classList.add("done");
+        else if (i === barGroup) bar.classList.add("active");
+      });
+    }
+
+    const sampleLeads = [
+      { name: "তানভীর", intent: "Booking", status: "Saved ✓" },
+      { name: "সুমাইয়া", intent: "Support", status: "Synced ✓" },
+      { name: "আরিফ", intent: "Quote", status: "Done ✓" }
+    ];
+
+    const wireSpecs = [
+      { d: "M 140 148 C 185 148, 185 148, 230 148", step: 0, sub: false },
+      { d: "M 334 148 C 382 148, 382 148, 430 148", step: 1, sub: false },
+      { d: "M 660 148 C 688 148, 688 148, 715 148", step: 2, sub: false },
+      { d: "M 508 200 C 508 242, 483 242, 483 285", step: 2, sub: true },
+      { d: "M 582 200 C 582 242, 605 242, 605 285", step: 2, sub: true }
+    ];
+
+    let wiresData = [];
+    let pulses = [];
+    let isPaused = false;
+    let currentStep = 0;
+    let elapsed = 0;
+    let lastTick = performance.now();
+    let wordEls = [];
+    let leadIdx = 0;
+
+    let bellClickedOnce = false;
+    let shareClickedTwice = false;
+
+    function resetScene6States() {
+      bellClickedOnce = false;
+      shareClickedTwice = false;
+      document.getElementById("s6BellView").classList.remove("hide");
+      document.getElementById("s6FollowBtn").classList.remove("show");
+      document.getElementById("s6ShareCard").classList.remove("share-active");
+      document.getElementById("s6ShareSub").textContent = "বন্ধুদের পাঠান";
+      document.getElementById("s6BellRipple").classList.remove("fire");
+      document.getElementById("s6ShareRipple").classList.remove("fire");
+
+      const cursor = document.getElementById("s6MouseCursor");
+      cursor.style.animation = "none";
+      void cursor.offsetWidth;
+      cursor.style.animation = "";
+    }
+
+    function initSvgWires() {
+      wiresLayer.innerHTML = "";
+      pulsesLayer.innerHTML = "";
+      wiresData = [];
+      pulses = [];
+
+      wireSpecs.forEach((spec, idx) => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", spec.d);
+        path.setAttribute("class", spec.sub ? "n8n-wire sub-wire" : "n8n-wire");
+        wiresLayer.appendChild(path);
+
+        const len = path.getTotalLength();
+        wiresData.push({ path, len, step: spec.step, sub: spec.sub });
+
+        const colors = spec.sub ? ["#c084fc"] : ["#22c55e", "#40C9FF"];
+        colors.forEach((col, cIdx) => {
+          const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          dot.setAttribute("class", "wire-pulse");
+          dot.setAttribute("fill", col);
+          dot.style.color = col;
+          pulsesLayer.appendChild(dot);
+
+          pulses.push({
+            wireIdx: idx,
+            el: dot,
+            t: cIdx * 0.5,
+            speed: spec.sub ? 0.007 : 0.0065
+          });
+        });
+      });
+    }
+
+    function moveCameraToStep(stepObj) {
+      const vpRect = viewport.getBoundingClientRect();
+      const safeW = Math.max(vpRect.width || 360, 260);
+      const safeH = Math.max(vpRect.height || 320, 220);
+      const baseScale = Math.max(0.25, Math.min(safeW / 460, safeH / 420));
+      const finalScale = baseScale * stepObj.zoom;
+
+      const offsetX = (460 - stepObj.focusX) * finalScale;
+      const offsetY = (220 - stepObj.focusY) * finalScale;
+
+      canvas.style.transform = `translate(${offsetX.toFixed(1)}px, ${offsetY.toFixed(1)}px) scale(${finalScale.toFixed(3)})`;
+    }
+
+    function addNewSheetRow() {
+      const item = sampleLeads[leadIdx % sampleLeads.length];
+      leadIdx++;
+      const tr = document.createElement("tr");
+      tr.className = "flash-row";
+      tr.innerHTML = `<td>${item.name}</td><td>${item.intent}</td><td style="color:#4ade80;font-weight:800;">${item.status}</td>`;
+      sheetRows.appendChild(tr);
+      if (sheetRows.children.length > 3) {
+        sheetRows.removeChild(sheetRows.firstElementChild);
+      }
+    }
+
+    function setStep(idx) {
+      currentStep = idx;
+      const stepObj = steps[currentStep];
+      const activeNodeIdx = Math.min(currentStep, mainNodes.length - 1);
+
+      if (hasInitialRendered) {
+        playTransitionSound();
+      } else {
+        hasInitialRendered = true;
+      }
+
+      updateThreeTitleBars(stepObj.barGroup);
+
+      topTitlePill.classList.remove("show-title");
+      if (currentStep % 2 === 0) {
+        void topTitlePill.offsetWidth;
+        topTitlePill.classList.add("show-title");
+      }
+
+      saroarQueryText.textContent = "";
+      saroarResultText.textContent = stepObj.saroarResult;
+      saroarResultPopup.classList.remove("visible");
+
+      applySceneBackground(stepObj);
+
+      if (stepObj.isIntroScene) {
+        canvas.classList.add("hidden-for-intro");
+        scene6IntroStage.classList.add("active");
+        resetScene6States();
+      } else {
+        scene6IntroStage.classList.remove("active");
+        canvas.classList.remove("hidden-for-intro");
+
+        mainNodes.forEach((node, i) => {
+          if (currentStep === 4) {
+            node.classList.remove("active");
+            node.classList.add("done");
+          } else {
+            node.classList.toggle("active", i === activeNodeIdx);
+            node.classList.toggle("done", i < activeNodeIdx);
+          }
+        });
+
+        subNodes.forEach((sNode) => {
+          sNode.classList.toggle("active", currentStep === 2);
+          sNode.classList.toggle("done", currentStep > 2);
+        });
+
+        wiresData.forEach((w) => {
+          const isHot = currentStep === 4 || w.step === activeNodeIdx || w.step === activeNodeIdx - 1;
+          w.path.classList.toggle("active-wire", isHot);
+        });
+
+        if (currentStep === 3) {
+          addNewSheetRow();
+        }
+
+        moveCameraToStep(stepObj);
+      }
+
+      karaokeLine.innerHTML = "";
+      wordEls = stepObj.words.map((word) => {
+        const span = document.createElement("span");
+        span.className = "k-word";
+        span.textContent = word;
+        karaokeLine.appendChild(span);
+        return span;
+      });
+    }
+
+    function animate(now) {
+      const rawDt = now - lastTick;
+      const dt = Math.min(Math.max(rawDt, 0), 100);
+      lastTick = now;
+
+      if (!isPaused) {
+        elapsed += dt;
+        const stepObj = steps[currentStep];
+
+        if (elapsed >= stepObj.duration) {
+          elapsed = 0;
+          setStep((currentStep + 1) % steps.length);
+        } else {
+          const progress = elapsed / stepObj.duration;
+
+          const typingProgress = Math.min(1, progress / 0.4);
+          const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
+          saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
+
+          if (progress >= 0.42) {
+            saroarResultPopup.classList.add("visible");
+          }
+
+          if (stepObj.isIntroScene) {
+            if (!bellClickedOnce && elapsed >= 920) {
+              bellClickedOnce = true;
+              playClickSound(820);
+              document.getElementById("s6BellRipple").classList.add("fire");
+              document.getElementById("s6BellView").classList.add("hide");
+              document.getElementById("s6FollowBtn").classList.add("show");
+            }
+            if (!shareClickedTwice && elapsed >= 2100) {
+              shareClickedTwice = true;
+              playClickSound(640);
+              document.getElementById("s6ShareRipple").classList.add("fire");
+              document.getElementById("s6ShareCard").classList.add("share-active");
+              document.getElementById("s6ShareSub").textContent = "শেয়ার সম্পন্ন ✓";
+            }
+          }
+
+          const activeWord = Math.min(
+            wordEls.length - 1,
+            Math.floor(progress * wordEls.length)
+          );
+
+          wordEls.forEach((el, i) => {
+            el.classList.toggle("active", i === activeWord);
+          });
+        }
+
+        for (const p of pulses) {
+          const w = wiresData[p.wireIdx];
+          if (!w) continue;
+          p.t += p.speed * (dt / 16.67);
+          if (p.t > 1) p.t -= 1;
+
+          const pt = w.path.getPointAtLength(p.t * w.len);
+          p.el.setAttribute("cx", pt.x.toFixed(1));
+          p.el.setAttribute("cy", pt.y.toFixed(1));
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function togglePause() {
+      unlockSoundSystem();
+      isPaused = !isPaused;
+      lastTick = performance.now();
+      document.body.classList.toggle("is-paused", isPaused);
+      pausePill.classList.toggle("visible", isPaused);
+      if (isPaused) {
+        whooshAudio.pause();
+      } else {
+        playTransitionSound();
+      }
+    }
+
+    window.addEventListener("pointerdown", togglePause);
+    window.addEventListener("resize", () => moveCameraToStep(steps[currentStep]));
+
+    initSvgWires();
+    setStep(0);
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
