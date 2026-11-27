@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Scene 3-5 0.25s Sync + 7% music1</title>
+  <title>n8n Style Workflow Reel • Scene 3-5 0.50s Fast Sync + 7% music1</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -913,8 +913,17 @@
   </style>
 </head>
 <body>
-  <audio id="voiceAudio" src="Voice.aac" preload="auto"></audio>
-  <audio id="bgMusic" src="music1.mp3" loop preload="auto"></audio>
+  <audio id="voiceAudio" preload="auto">
+    <source src="Voice.aac" type="audio/aac" />
+    <source src="Voice.mp3" type="audio/mpeg" />
+    <source src="Voice.wav" type="audio/wav" />
+  </audio>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music1.mp3" type="audio/mpeg" />
+    <source src="music1.wav" type="audio/wav" />
+    <source src="music1.aac" type="audio/aac" />
+  </audio>
 
   <div class="scene-ambient-bg" id="sceneAmbientBg"></div>
   <div class="n8n-dots-bg"></div>
@@ -1162,8 +1171,8 @@
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
 
-    // সিন ৩ থেকে ৫ পর্যন্ত স্লো-অফসেট 0.25s কমিয়ে আনা হয়েছে
-    const SCENE_3_TO_5_LAG_SEC = 0.25;
+    // সিন ৩, ৪, ৫ আরও 0.25s ফাস্ট করা হয়েছে (মোট 0.50s এগিয়ে আনা হয়েছে)
+    const SCENE_3_TO_5_FAST_SEC = 0.50;
 
     // ব্যাকগ্রাউন্ড সাউন্ডের ভলিউম 7% (0.07)
     const BG_MUSIC_VOLUME = 0.07;
@@ -1217,7 +1226,6 @@
     let hasInitialRendered = false;
     let fallbackAudioSec = 0;
 
-    // সিন 1-6 (index 0-5): সিন ৩, ৪, ৫ (index 2, 3, 4) এর শুরু ও শেষ 0.25s এগিয়ে/টাইম কমিয়ে আনা হয়েছে
     const steps = [
       {
         startRatio: 0.00, endRatio: 0.17,
@@ -1240,9 +1248,9 @@
         weights: [0.20, 0.18, 0.24, 0.22, 0.16]
       },
       {
-        // সিন ৩ (index 2)
+        // সিন ৩ (index 2) -> আরও 0.25s ফাস্ট (মোট 0.50s এগিয়ে)
         startRatio: 0.34, endRatio: 0.52,
-        lagOffsetSec: SCENE_3_TO_5_LAG_SEC,
+        fastOffsetSec: SCENE_3_TO_5_FAST_SEC,
         focusX: 545, focusY: 225, zoom: 1.05, barGroup: 1,
         bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
@@ -1252,9 +1260,9 @@
         weights: [0.13, 0.15, 0.19, 0.17, 0.17, 0.19]
       },
       {
-        // সিন ৪ (index 3)
+        // সিন ৪ (index 3) -> আরও 0.25s ফাস্ট (মোট 0.50s এগিয়ে)
         startRatio: 0.52, endRatio: 0.68,
-        lagOffsetSec: SCENE_3_TO_5_LAG_SEC,
+        fastOffsetSec: SCENE_3_TO_5_FAST_SEC,
         focusX: 790, focusY: 215, zoom: 1.08, barGroup: 1,
         bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
@@ -1264,9 +1272,9 @@
         weights: [0.20, 0.20, 0.20, 0.22, 0.18]
       },
       {
-        // সিন ৫ (index 4)
+        // সিন ৫ (index 4) -> আরও 0.25s ফাস্ট (মোট 0.50s এগিয়ে)
         startRatio: 0.68, endRatio: 0.83,
-        lagOffsetSec: SCENE_3_TO_5_LAG_SEC,
+        fastOffsetSec: SCENE_3_TO_5_FAST_SEC,
         focusX: 465, focusY: 210, zoom: 0.56, barGroup: 1,
         bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
@@ -1312,11 +1320,10 @@
     function resolveStepFromTime(rawVoiceSec) {
       const dur = getTotalVoiceDuration();
 
-      // সিন ৩-৫ এর জন্য 0.25s টাইম কমিয়ে আনা হয়েছে (সিনের শুরু ও শেষ উভয়ই 0.25s আগে)
       for (let i = 0; i < steps.length; i++) {
         const s = steps[i];
-        const lag = s.lagOffsetSec || 0;
-        const effectiveSec = Math.max(0, rawVoiceSec + lag);
+        const fastOffset = s.fastOffsetSec || 0;
+        const effectiveSec = Math.max(0, rawVoiceSec + fastOffset);
         const startSec = s.startRatio * dur;
         const endSec = s.endRatio * dur;
         const isLast = i === steps.length - 1;
@@ -1697,7 +1704,6 @@
       }
     }
 
-    // প্রথম ক্লিক/ট্যাপেই যেন ব্যাকগ্রাউন্ড সাউন্ড (7%) ও ভয়েস দুটোই নিশ্চিতভাবে চালু হয়
     window.addEventListener("pointerdown", () => {
       if (!audioUnlocked && !isPaused) {
         startAudioTracks(true);
@@ -1713,7 +1719,9 @@
     });
 
     voiceAudio.addEventListener("seeked", () => {
-      bgMusic.currentTime = voiceAudio.currentTime % Math.max(1, bgMusic.duration || 1);
+      if (Number.isFinite(bgMusic.duration) && bgMusic.duration > 0) {
+        bgMusic.currentTime = voiceAudio.currentTime % bgMusic.duration;
+      }
       const resolved = resolveStepFromTime(voiceAudio.currentTime || 0);
       setStep(resolved.stepIndex);
       syncVisualsToProgress(steps[currentStep], resolved.stepProgress, resolved.stepElapsedMs);
