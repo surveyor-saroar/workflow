@@ -12,6 +12,7 @@
     }
 
     html, body {
+      position: relative;
       width: 100%;
       height: 100%;
       overflow: hidden;
@@ -29,21 +30,21 @@
         #111318;
     }
 
-    /* n8n-স্টাইল সূক্ষ্ম ডটেড ক্যানভাস ব্যাকগ্রাউন্ড */
+    /* n8n-স্টাইল সূক্ষ্ম ডটেড ক্যানভাস ব্যাকগ্রাউন্ড (সবচেয়ে নিচের লেয়ারে) */
     .n8n-dots-bg {
       position: fixed;
       inset: 0;
-      z-index: 1;
+      z-index: 0;
       pointer-events: none;
       background-image: radial-gradient(rgba(148, 163, 184, 0.24) 1.25px, transparent 1.25px);
       background-size: 22px 22px;
       mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.98) 52%, rgba(0, 0, 0, 0.35) 100%);
     }
 
-    /* ৯:১৬ ভার্টিক্যাল কন্টেন্ট ফ্রেম (বর্ডার ছাড়া) */
+    /* ৯:১৬ ভার্টিক্যাল কন্টেন্ট ফ্রেম (ব্যাকগ্রাউন্ডের ওপরে স্পষ্টভাবে দৃশ্যমান) */
     .stage-9x16 {
       position: relative;
-      z-index: 5;
+      z-index: 10;
       width: min(96vw, calc(96vh * 9 / 16));
       height: min(96vh, calc(96vw * 16 / 9));
       display: flex;
@@ -52,13 +53,13 @@
       justify-content: space-between;
       padding: 18px 10px 22px;
       pointer-events: none;
-      overflow: hidden;
+      overflow: visible;
     }
 
     /* উপরের ছোট স্ট্যাটাস পিল */
     .top-pill {
       position: relative;
-      z-index: 10;
+      z-index: 20;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -67,8 +68,8 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: #e2e8f0;
-      background: rgba(24, 27, 35, 0.88);
-      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(24, 27, 35, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.24);
       padding: 7px 15px;
       border-radius: 999px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -85,6 +86,7 @@
     /* ক্যামেরা ভিউপোর্ট ও ক্যানভাস রিগ */
     .camera-viewport {
       position: relative;
+      z-index: 12;
       width: 100%;
       flex: 1;
       display: flex;
@@ -95,6 +97,7 @@
 
     .n8n-canvas {
       position: relative;
+      z-index: 14;
       width: 920px;
       height: 440px;
       flex-shrink: 0;
@@ -141,7 +144,7 @@
     /* আসল n8n নোড ডিজাইন */
     .n8n-node {
       position: absolute;
-      z-index: 3;
+      z-index: 4;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -194,7 +197,7 @@
       border-color: #22c55e;
     }
 
-    /* n8n কানেক্টর পোর্ট ডট (বাম, ডান ও নিচে) */
+    /* n8n কানেক্টর পোর্ট ডট */
     .port {
       position: absolute;
       width: 12px;
@@ -202,7 +205,7 @@
       border-radius: 999px;
       background: #94a3b8;
       border: 2.5px solid #111318;
-      z-index: 4;
+      z-index: 5;
     }
 
     .port.in {
@@ -220,7 +223,6 @@
     .port.bottom-1 {
       bottom: -7px;
       left: 34%;
-      transform: translateX(-50%);
       transform: translateX(-50%) rotate(45deg);
       border-radius: 2px;
     }
@@ -385,7 +387,7 @@
     /* নিচে বড় ও এক-লাইনের হলুদ কারাওকে ক্যাপশন */
     .karaoke-box {
       position: relative;
-      z-index: 10;
+      z-index: 20;
       width: 100%;
       display: flex;
       align-items: center;
@@ -428,7 +430,7 @@
       position: fixed;
       top: 16px;
       right: 16px;
-      z-index: 25;
+      z-index: 30;
       font-size: 12px;
       font-weight: 800;
       color: #090d16;
@@ -631,7 +633,7 @@
       document.getElementById("sub-1")
     ];
 
-    /* প্রতিটি ধাপের অটো-ক্যামেরা ফোকাস (ক্যানভাস কো-অর্ডিনেট) ও ১-লাইনের ছোট ক্যাপশন */
+    /* প্রতিটি ধাপের অটো-ক্যামেরা ফোকাস ও ১-লাইনের ছোট ক্যাপশন */
     const steps = [
       {
         focusX: 115,
@@ -676,7 +678,6 @@
       { name: "আরিফ", intent: "Quote", status: "Done ✓" }
     ];
 
-    /* SVG তারের সংযোগ তৈরি (মূল হরিজন্টাল তার + AI Agent-এর নিচের সাব-নোড তার) */
     const wireSpecs = [
       { d: "M 140 148 C 185 148, 185 148, 230 148", step: 0, sub: false },
       { d: "M 334 148 C 382 148, 382 148, 430 148", step: 1, sub: false },
