@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • 0.5s Slower Sync + 7% music1</title>
+  <title>n8n Style Workflow Reel • Scene 3-5 0.25s Sync + 7% music1</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -1162,8 +1162,8 @@
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
 
-    // সিনগুলো ভয়েস থেকে 0.50s স্লো/পিছিয়ে সিঙ্ক করা হয়েছে
-    const ANIM_LAG_OFFSET_SEC = 0.50;
+    // সিন ৩ থেকে ৫ পর্যন্ত স্লো-অফসেট 0.25s কমিয়ে আনা হয়েছে
+    const SCENE_3_TO_5_LAG_SEC = 0.25;
 
     // ব্যাকগ্রাউন্ড সাউন্ডের ভলিউম 7% (0.07)
     const BG_MUSIC_VOLUME = 0.07;
@@ -1217,6 +1217,7 @@
     let hasInitialRendered = false;
     let fallbackAudioSec = 0;
 
+    // সিন 1-6 (index 0-5): সিন ৩, ৪, ৫ (index 2, 3, 4) এর শুরু ও শেষ 0.25s এগিয়ে/টাইম কমিয়ে আনা হয়েছে
     const steps = [
       {
         startRatio: 0.00, endRatio: 0.17,
@@ -1239,7 +1240,9 @@
         weights: [0.20, 0.18, 0.24, 0.22, 0.16]
       },
       {
+        // সিন ৩ (index 2)
         startRatio: 0.34, endRatio: 0.52,
+        lagOffsetSec: SCENE_3_TO_5_LAG_SEC,
         focusX: 545, focusY: 225, zoom: 1.05, barGroup: 1,
         bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
@@ -1249,7 +1252,9 @@
         weights: [0.13, 0.15, 0.19, 0.17, 0.17, 0.19]
       },
       {
+        // সিন ৪ (index 3)
         startRatio: 0.52, endRatio: 0.68,
+        lagOffsetSec: SCENE_3_TO_5_LAG_SEC,
         focusX: 790, focusY: 215, zoom: 1.08, barGroup: 1,
         bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
@@ -1259,7 +1264,9 @@
         weights: [0.20, 0.20, 0.20, 0.22, 0.18]
       },
       {
+        // সিন ৫ (index 4)
         startRatio: 0.68, endRatio: 0.83,
+        lagOffsetSec: SCENE_3_TO_5_LAG_SEC,
         focusX: 465, focusY: 210, zoom: 0.56, barGroup: 1,
         bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
@@ -1289,37 +1296,38 @@
     }
 
     function getCurrentVoiceTime(dtSec) {
-      let rawSec = 0;
       if (!voiceAudio.paused && !voiceAudio.ended && Number.isFinite(voiceAudio.currentTime)) {
-        rawSec = voiceAudio.currentTime;
-        fallbackAudioSec = rawSec;
-      } else if (!isPaused && !audioUnlocked) {
+        fallbackAudioSec = voiceAudio.currentTime;
+        return voiceAudio.currentTime;
+      }
+      if (!isPaused && !audioUnlocked) {
         const dur = getTotalVoiceDuration();
         fallbackAudioSec = (fallbackAudioSec + dtSec) % dur;
-        rawSec = fallbackAudioSec;
-      } else {
-        rawSec = Number.isFinite(voiceAudio.currentTime) ? voiceAudio.currentTime : fallbackAudioSec;
       }
-      return Math.max(0, rawSec - ANIM_LAG_OFFSET_SEC);
+      return Number.isFinite(voiceAudio.currentTime) && voiceAudio.currentTime > 0
+        ? voiceAudio.currentTime
+        : fallbackAudioSec;
     }
 
-    function resolveStepFromTime(currentSec) {
+    function resolveStepFromTime(rawVoiceSec) {
       const dur = getTotalVoiceDuration();
-      const clampedSec = Math.max(0, Math.min(currentSec, Math.max(0.001, dur - 0.0001)));
-      const ratio = clampedSec / dur;
 
+      // সিন ৩-৫ এর জন্য 0.25s টাইম কমিয়ে আনা হয়েছে (সিনের শুরু ও শেষ উভয়ই 0.25s আগে)
       for (let i = 0; i < steps.length; i++) {
         const s = steps[i];
+        const lag = s.lagOffsetSec || 0;
+        const effectiveSec = Math.max(0, rawVoiceSec + lag);
+        const startSec = s.startRatio * dur;
+        const endSec = s.endRatio * dur;
         const isLast = i === steps.length - 1;
-        if (ratio >= s.startRatio && (ratio < s.endRatio || isLast)) {
-          const span = Math.max(0.0001, s.endRatio - s.startRatio);
-          const stepProgress = Math.max(0, Math.min(1, (ratio - s.startRatio) / span));
-          const stepDurationMs = span * dur * 1000;
-          const stepElapsedMs = stepProgress * stepDurationMs;
+
+        if (effectiveSec >= startSec && (effectiveSec < endSec || isLast)) {
+          const spanSec = Math.max(0.001, endSec - startSec);
+          const stepProgress = Math.max(0, Math.min(1, (effectiveSec - startSec) / spanSec));
           return {
             stepIndex: i,
             stepProgress,
-            stepElapsedMs
+            stepElapsedMs: stepProgress * spanSec * 1000
           };
         }
       }
@@ -1331,7 +1339,7 @@
       };
     }
 
-    function unlockAndPlayAudio(resetToZero = false) {
+    function startAudioTracks(resetToZero = false) {
       if (!audioCtx) {
         const AC = window.AudioContext || window.webkitAudioContext;
         if (AC) audioCtx = new AC();
@@ -1339,28 +1347,35 @@
       if (audioCtx && audioCtx.state === "suspended") {
         audioCtx.resume().catch(() => {});
       }
+
+      if (resetToZero) {
+        try {
+          voiceAudio.currentTime = 0;
+          bgMusic.currentTime = 0;
+          fallbackAudioSec = 0;
+        } catch (_) {}
+      }
+
+      voiceAudio.volume = 1.0;
+      voiceAudio.playbackRate = 1.0;
+      bgMusic.volume = BG_MUSIC_VOLUME;
+
+      const pVoice = voiceAudio.play();
+      if (pVoice && typeof pVoice.catch === "function") {
+        pVoice.catch(() => {});
+      }
+
+      const pBg = bgMusic.play();
+      if (pBg && typeof pBg.catch === "function") {
+        pBg.catch(() => {});
+      }
+
       if (!audioUnlocked) {
         audioUnlocked = true;
         whooshAudio.play().then(() => {
           whooshAudio.pause();
           whooshAudio.currentTime = 0;
         }).catch(() => {});
-      }
-      if (!isPaused) {
-        try {
-          voiceAudio.playbackRate = 1.0;
-          if (resetToZero) {
-            voiceAudio.currentTime = 0;
-            bgMusic.currentTime = 0;
-            fallbackAudioSec = 0;
-          }
-          const pVoice = voiceAudio.play();
-          if (pVoice && typeof pVoice.catch === "function") pVoice.catch(() => {});
-
-          bgMusic.volume = BG_MUSIC_VOLUME;
-          const pBg = bgMusic.play();
-          if (pBg && typeof pBg.catch === "function") pBg.catch(() => {});
-        } catch (_) {}
       }
     }
 
@@ -1677,23 +1692,33 @@
         voiceAudio.pause();
         bgMusic.pause();
       } else {
-        unlockAndPlayAudio(!audioUnlocked);
+        startAudioTracks(!audioUnlocked);
         playTransitionSound();
       }
     }
 
+    // প্রথম ক্লিক/ট্যাপেই যেন ব্যাকগ্রাউন্ড সাউন্ড (7%) ও ভয়েস দুটোই নিশ্চিতভাবে চালু হয়
+    window.addEventListener("pointerdown", () => {
+      if (!audioUnlocked && !isPaused) {
+        startAudioTracks(true);
+        playTransitionSound();
+      } else {
+        togglePause();
+      }
+    });
+
     voiceAudio.addEventListener("loadedmetadata", () => {
-      const resolved = resolveStepFromTime(Math.max(0, (voiceAudio.currentTime || 0) - ANIM_LAG_OFFSET_SEC));
+      const resolved = resolveStepFromTime(voiceAudio.currentTime || 0);
       setStep(resolved.stepIndex);
     });
 
     voiceAudio.addEventListener("seeked", () => {
-      const resolved = resolveStepFromTime(Math.max(0, (voiceAudio.currentTime || 0) - ANIM_LAG_OFFSET_SEC));
+      bgMusic.currentTime = voiceAudio.currentTime % Math.max(1, bgMusic.duration || 1);
+      const resolved = resolveStepFromTime(voiceAudio.currentTime || 0);
       setStep(resolved.stepIndex);
       syncVisualsToProgress(steps[currentStep], resolved.stepProgress, resolved.stepElapsedMs);
     });
 
-    window.addEventListener("pointerdown", togglePause);
     window.addEventListener("resize", () => moveCameraToStep(steps[currentStep]));
 
     initSvgWires();
