@@ -3,19 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • Dark Wood Plank Background</title>
+  <title>n8n Style Workflow Reel • Golden Particle Dust Background</title>
   <style>
     :root {
-      --wood-base-dark: #181818;
-      --wood-base-mid: #242424;
-      --wood-hi-low: #333333;
-      --wood-hi-bright: #3B3B3B;
-      --wood-groove-dark: #0B0B0B;
-      --wood-groove-soft: #111111;
-      --glow1-color: rgba(59, 59, 59, 0.34);
-      --glow1-pos: 50% 35%;
-      --glow2-color: rgba(11, 11, 11, 0.55);
-      --glow2-pos: 50% 85%;
+      --glow1-color: rgba(245, 158, 11, 0.16);
+      --glow1-pos: 52% 45%;
+      --glow2-color: rgba(217, 119, 6, 0.12);
+      --glow2-pos: 22% 76%;
     }
 
     * {
@@ -37,9 +31,12 @@
       align-items: center;
       justify-content: center;
       color: #f8fafc;
-      background-color: var(--wood-groove-soft);
+      background-color: #050505;
     }
 
+    body.is-paused .golden-dust-bg,
+    body.is-paused .golden-dust-bg::before,
+    body.is-paused .golden-dust-bg::after,
     body.is-paused .typing-cursor,
     body.is-paused .saroar-badge,
     body.is-paused .icon-wrap svg,
@@ -50,51 +47,95 @@
       animation-play-state: paused !important;
     }
 
-    /* Dark Wood Plank / Vertical Wood Grain Layer */
-    .dark-wood-bg {
+    /* Golden Cosmic Dust / Particle Background with Gentle Motion */
+    .golden-dust-bg {
       position: fixed;
-      inset: 0;
+      inset: -8%;
       z-index: 0;
       pointer-events: none;
-      background-color: var(--wood-base-dark);
+      background-color: #050505;
       background-image:
-        repeating-linear-gradient(
-          90deg,
-          transparent 0px,
-          transparent 11px,
-          rgba(59, 59, 59, 0.14) 12px,
-          transparent 13px,
-          transparent 27px,
-          rgba(11, 11, 11, 0.45) 28px,
-          transparent 29px
-        ),
-        repeating-linear-gradient(
-          90deg,
-          var(--wood-groove-dark) 0px,
-          var(--wood-groove-dark) 2px,
-          var(--wood-groove-soft) 2px,
-          var(--wood-groove-soft) 5px,
-          var(--wood-base-dark) 5px,
-          var(--wood-base-mid) 38px,
-          var(--wood-hi-low) 64px,
-          var(--wood-hi-bright) 76px,
-          var(--wood-hi-low) 88px,
-          var(--wood-base-mid) 114px,
-          var(--wood-base-dark) 148px
-        );
-      background-size: 150px 100%, 150px 100%;
+        radial-gradient(ellipse 68% 42% at 52% 46%, rgba(245, 158, 11, 0.18), transparent 72%),
+        radial-gradient(ellipse 46% 36% at 84% 16%, rgba(217, 119, 6, 0.16), transparent 70%),
+        radial-gradient(ellipse 48% 44% at 18% 82%, rgba(180, 83, 9, 0.15), transparent 72%),
+        radial-gradient(rgba(253, 224, 71, 0.72) 1px, transparent 1.4px),
+        radial-gradient(rgba(245, 158, 11, 0.55) 1.3px, transparent 1.7px),
+        radial-gradient(rgba(254, 240, 138, 0.42) 0.8px, transparent 1.2px);
+      background-size:
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        46px 46px,
+        74px 74px,
+        31px 31px;
+      background-position:
+        0 0,
+        0 0,
+        0 0,
+        6px 12px,
+        24px 8px,
+        15px 21px;
+      animation: goldenDustDrift 22s ease-in-out infinite alternate;
+      will-change: transform, opacity;
     }
 
-    /* Center Highlight & Edge Dark Vignette */
+    .golden-dust-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(rgba(251, 191, 36, 0.65) 1px, transparent 1.3px),
+        radial-gradient(rgba(234, 179, 8, 0.45) 1.5px, transparent 2px);
+      background-size: 58px 58px, 92px 92px;
+      background-position: 18px 28px, 42px 14px;
+      opacity: 0.75;
+      animation: goldenDustLayerShift 18s linear infinite alternate;
+      will-change: transform, opacity;
+    }
+
+    .golden-dust-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 48%, rgba(3, 3, 3, 0.78) 92%, rgba(0, 0, 0, 0.95) 100%);
+    }
+
+    @keyframes goldenDustDrift {
+      0% {
+        transform: translate3d(-1.5%, -1%, 0) scale(1);
+        opacity: 0.92;
+      }
+      50% {
+        transform: translate3d(1%, 1.2%, 0) scale(1.035);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(2%, -0.8%, 0) scale(1.055);
+        opacity: 0.95;
+      }
+    }
+
+    @keyframes goldenDustLayerShift {
+      0% {
+        transform: translate3d(0px, 0px, 0) rotate(0deg);
+        opacity: 0.65;
+      }
+      100% {
+        transform: translate3d(-14px, 10px, 0) rotate(1.2deg);
+        opacity: 0.9;
+      }
+    }
+
     .scene-ambient-bg {
       position: fixed;
       inset: 0;
       z-index: 1;
       pointer-events: none;
       background:
-        radial-gradient(ellipse at var(--glow1-pos), var(--glow1-color), transparent 58%),
-        radial-gradient(circle at 50% 50%, transparent 44%, var(--wood-groove-soft) 92%, var(--wood-groove-dark) 100%),
-        linear-gradient(180deg, rgba(11, 11, 11, 0.42) 0%, rgba(51, 51, 51, 0.14) 45%, rgba(11, 11, 11, 0.52) 100%);
+        radial-gradient(circle at var(--glow1-pos), var(--glow1-color), transparent 48%),
+        radial-gradient(circle at var(--glow2-pos), var(--glow2-color), transparent 54%),
+        transparent;
       transition: background 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -107,7 +148,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px 32px;
+      padding: 12px 14px 32px;
       pointer-events: none;
       overflow: visible;
     }
@@ -122,35 +163,6 @@
       gap: 7px;
     }
 
-    .mini-digital-clock {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(11, 11, 11, 0.92);
-      border: 1px solid rgba(250, 204, 21, 0.55);
-      color: #facc15;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-      padding: 3px 9px;
-      border-radius: 999px;
-      box-shadow: 0 4px 14px rgba(11, 11, 11, 0.65);
-      white-space: nowrap;
-    }
-
-    .mini-digital-clock .clock-scene-label {
-      color: #38bdf8;
-    }
-
-    .mini-digital-clock .clock-voice-tag {
-      color: #4ade80;
-    }
-
-    .mini-digital-clock .clock-file-tag {
-      color: #c084fc;
-    }
-
     .three-title-bars {
       width: 100%;
       max-width: 390px;
@@ -160,13 +172,13 @@
     }
 
     .title-bar-item {
-      background: rgba(24, 24, 24, 0.92);
-      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: rgba(18, 17, 15, 0.88);
+      border: 1px solid rgba(250, 204, 21, 0.24);
       border-radius: 999px;
       padding: 5px 8px;
       font-size: 10.5px;
       font-weight: 800;
-      color: #cbd5e1;
+      color: #e2e8f0;
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
@@ -195,11 +207,11 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: #e2e8f0;
-      background: rgba(24, 24, 24, 0.94);
-      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(18, 17, 15, 0.92);
+      border: 1px solid rgba(250, 204, 21, 0.26);
       padding: 6px 14px;
       border-radius: 999px;
-      box-shadow: 0 8px 24px rgba(11, 11, 11, 0.55);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
       opacity: 0;
       transform: translateY(-10px) scale(0.92);
       max-height: 0;
@@ -273,11 +285,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(17, 17, 17, 0.94);
+      background: rgba(16, 15, 13, 0.92);
       border: 1px solid rgba(250, 204, 21, 0.45);
       border-radius: 12px;
       padding: 7px 11px;
-      box-shadow: 0 10px 26px rgba(11, 11, 11, 0.6);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
     }
 
     .saroar-avatar-circle {
@@ -287,7 +299,7 @@
       overflow: hidden;
       border: 1.5px solid #ffffff;
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-      background: #242424;
+      background: #1e2433;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -344,7 +356,7 @@
     }
 
     .saroar-result-popup {
-      background: rgba(24, 24, 24, 0.96);
+      background: rgba(20, 19, 16, 0.95);
       border: 1px solid rgba(250, 204, 21, 0.45);
       border-left: 3px solid #facc15;
       border-radius: 10px;
@@ -352,7 +364,7 @@
       font-size: 12px;
       font-weight: 600;
       color: #e2e8f0;
-      box-shadow: 0 12px 28px rgba(11, 11, 11, 0.6);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
       opacity: 0;
       transform: translateY(-6px) scale(0.96);
       transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
@@ -410,7 +422,7 @@
 
     .n8n-wire {
       fill: none;
-      stroke: #52525b;
+      stroke: #57534e;
       stroke-width: 3;
       stroke-linecap: round;
       transition: stroke 0.3s ease, stroke-width 0.3s ease;
@@ -419,7 +431,7 @@
     .n8n-wire.sub-wire {
       stroke-dasharray: 6 6;
       stroke-width: 2.4;
-      stroke: #71717a;
+      stroke: #78716c;
     }
 
     .n8n-wire.active-wire {
@@ -446,12 +458,12 @@
       width: 104px;
       height: 104px;
       border-radius: 24px;
-      background: #181818;
-      border: 2px solid #3B3B3B;
+      background: rgba(24, 23, 20, 0.92);
+      border: 2px solid #3f3f46;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 14px 30px rgba(11, 11, 11, 0.65);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
       transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
     }
 
@@ -467,16 +479,16 @@
       width: 74px;
       height: 74px;
       border-radius: 999px;
-      background: #111111;
+      background: rgba(17, 16, 14, 0.94);
     }
 
     .n8n-node.active .node-box {
-      background: #242424;
-      border-color: #40C9FF;
+      background: rgba(31, 29, 24, 0.96);
+      border-color: #facc15;
       box-shadow:
-        0 0 0 4px rgba(64, 201, 255, 0.2),
-        0 0 28px rgba(232, 28, 255, 0.28),
-        0 16px 34px rgba(11, 11, 11, 0.72);
+        0 0 0 4px rgba(250, 204, 21, 0.18),
+        0 0 28px rgba(245, 158, 11, 0.3),
+        0 16px 34px rgba(0, 0, 0, 0.72);
       transform: scale(1.05);
     }
 
@@ -490,7 +502,7 @@
       height: 12px;
       border-radius: 999px;
       background: #94a3b8;
-      border: 2.5px solid #0B0B0B;
+      border: 2.5px solid #09090b;
       z-index: 5;
     }
 
@@ -608,18 +620,18 @@
     .agent-inner-sub { font-size: 12px; color: #cbd5e1; margin-top: 2px; }
 
     .node-label { margin-top: 10px; text-align: center; white-space: nowrap; }
-    .node-name { font-size: 15px; font-weight: 800; color: #f8fafc; text-shadow: 0 2px 6px rgba(11, 11, 11, 0.85); }
-    .node-role { font-size: 12px; color: #cbd5e1; margin-top: 2px; font-weight: 600; text-shadow: 0 2px 6px rgba(11, 11, 11, 0.85); }
+    .node-name { font-size: 15px; font-weight: 800; color: #f8fafc; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9); }
+    .node-role { font-size: 12px; color: #cbd5e1; margin-top: 2px; font-weight: 600; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9); }
     .sub-node .node-name { font-size: 13px; color: #f8fafc; }
 
     .sheet-card {
       margin-top: 10px;
       width: 215px;
-      background: rgba(24, 24, 24, 0.96);
+      background: rgba(20, 19, 16, 0.96);
       border: 1px solid rgba(74, 222, 128, 0.45);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 10px 25px rgba(11, 11, 11, 0.65);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.65);
     }
 
     .sheet-card table { width: 100%; border-collapse: collapse; font-size: 11px; }
@@ -653,15 +665,15 @@
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      background: rgba(24, 24, 24, 0.95);
-      border: 1px solid rgba(56, 189, 248, 0.55);
+      background: rgba(20, 19, 16, 0.95);
+      border: 1px solid rgba(250, 204, 21, 0.5);
       color: #facc15;
       font-size: 13px;
       font-weight: 900;
       padding: 6px 8px 6px 14px;
       border-radius: 999px;
       letter-spacing: 0.02em;
-      box-shadow: 0 8px 20px rgba(11, 11, 11, 0.6);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     }
 
     .s6-right-fb-circle {
@@ -695,8 +707,8 @@
 
     .s6-card {
       position: relative;
-      background: rgba(24, 24, 24, 0.95);
-      border: 1.5px solid rgba(148, 163, 184, 0.28);
+      background: rgba(20, 19, 16, 0.95);
+      border: 1.5px solid rgba(250, 204, 21, 0.25);
       border-radius: 16px;
       padding: 12px 8px;
       min-height: 158px;
@@ -706,7 +718,7 @@
       justify-content: center;
       gap: 7px;
       text-align: center;
-      box-shadow: 0 12px 26px rgba(11, 11, 11, 0.6);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.6);
       transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
     }
 
@@ -744,7 +756,7 @@
     .s6-profile-role {
       font-size: 10px;
       font-weight: 700;
-      color: #7dd3fc;
+      color: #fde047;
     }
 
     .s6-bell-view {
@@ -816,7 +828,7 @@
       z-index: 35;
       pointer-events: none;
       opacity: 0;
-      filter: drop-shadow(0 4px 10px rgba(11, 11, 11, 0.75));
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.75));
     }
 
     .scene6-intro-stage.active .s6-mouse-cursor {
@@ -895,8 +907,8 @@
       color: #ffffff;
       padding: 4px 8px;
       border-radius: 7px;
-      background: rgba(11, 11, 11, 0.86);
-      text-shadow: 0 2px 6px rgba(11, 11, 11, 0.85);
+      background: rgba(12, 11, 9, 0.84);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
       overflow: hidden;
       transition: color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
     }
@@ -949,7 +961,7 @@
       font-size: 12px;
       font-weight: 800;
       color: #090d16;
-      background: linear-gradient(90deg, #40C9FF, #E81CFF);
+      background: linear-gradient(90deg, #facc15, #f59e0b);
       padding: 6px 14px;
       border-radius: 999px;
       opacity: 0;
@@ -977,22 +989,12 @@
     <source src="music1.aac" type="audio/aac" />
   </audio>
 
-  <div class="dark-wood-bg"></div>
+  <div class="golden-dust-bg"></div>
   <div class="scene-ambient-bg" id="sceneAmbientBg"></div>
   <div class="pause-pill" id="pausePill">PAUSED • ট্যাপ করে চালান</div>
 
   <div class="stage-9x16">
     <div class="top-stack">
-      <div class="mini-digital-clock" id="miniDigitalClock">
-        <span>⏱</span>
-        <span class="clock-scene-label" id="clockSceneLabel">সিন-১:</span>
-        <span id="clockSceneTime">00.00s/2.25s</span>
-        <span>•</span>
-        <span class="clock-voice-tag" id="clockVoiceTime">ভয়েস 00.00s</span>
-        <span>•</span>
-        <span class="clock-file-tag" id="clockFileTime">ফাইল 00.00s</span>
-      </div>
-
       <div class="three-title-bars" id="threeTitleBars">
         <div class="title-bar-item active" id="tBar-0">১. ফর্ম ও ফিল্টার</div>
         <div class="title-bar-item" id="tBar-1">২. AI ও শিট</div>
@@ -1026,8 +1028,8 @@
         <svg class="wires-svg" id="wiresSvg" viewBox="0 0 920 440">
           <defs>
             <linearGradient id="n8nGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#40C9FF" />
-              <stop offset="100%" stop-color="#E81CFF" />
+              <stop offset="0%" stop-color="#facc15" />
+              <stop offset="100%" stop-color="#f59e0b" />
             </linearGradient>
           </defs>
           <g id="wiresLayer"></g>
@@ -1244,14 +1246,6 @@
     const TOTAL_VOICE_SEC = VOICE_TIMETABLE_END_SEC[VOICE_TIMETABLE_END_SEC.length - 1];
     const TOTAL_CYCLE_SEC = VOICE_START_OFFSET_SEC + TOTAL_VOICE_SEC;
 
-    const BN_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-    function toBnNum(numIndex) {
-      return String(numIndex + 1).replace(/\d/g, (d) => BN_DIGITS[Number(d)]);
-    }
-    function fmtSec(val) {
-      return `${Math.max(0, val).toFixed(2).padStart(5, "0")}s`;
-    }
-
     const voiceAudio = document.getElementById("voiceAudio");
     voiceAudio.volume = 1.0;
     voiceAudio.playbackRate = 1.0;
@@ -1274,10 +1268,6 @@
     const karaokeLine = document.getElementById("karaokeLine");
     const pausePill = document.getElementById("pausePill");
     const sheetRows = document.getElementById("sheetRows");
-    const clockSceneLabel = document.getElementById("clockSceneLabel");
-    const clockSceneTime = document.getElementById("clockSceneTime");
-    const clockVoiceTime = document.getElementById("clockVoiceTime");
-    const clockFileTime = document.getElementById("clockFileTime");
 
     const tBars = [
       document.getElementById("tBar-0"),
@@ -1309,8 +1299,8 @@
       {
         startSec: 0.00, endSec: 2.25,
         focusX: 115, focusY: 165, zoom: 1.18, barGroup: 0,
-        bgColor1: "rgba(59, 59, 59, 0.36)", bgPos1: "42% 32%",
-        bgColor2: "rgba(11, 11, 11, 0.56)", bgPos2: "55% 85%",
+        bgColor1: "rgba(245, 158, 11, 0.16)", bgPos1: "48% 42%",
+        bgColor2: "rgba(217, 119, 6, 0.12)", bgPos2: "25% 78%",
         saroarQuery: "ফর্ম সাবমিট হলে কী হবে?",
         saroarResult: "ফর্ম সাবমিট করলেই অটোমেশন শুরু",
         words: ["ফর্ম", "সাবমিট", "করলেই", "অটোমেশন", "শুরু"],
@@ -1319,8 +1309,8 @@
       {
         startSec: 2.25, endSec: 4.15,
         focusX: 295, focusY: 165, zoom: 1.18, barGroup: 0,
-        bgColor1: "rgba(59, 59, 59, 0.38)", bgPos1: "48% 34%",
-        bgColor2: "rgba(11, 11, 11, 0.56)", bgPos2: "52% 85%",
+        bgColor1: "rgba(251, 191, 36, 0.15)", bgPos1: "52% 45%",
+        bgColor2: "rgba(180, 83, 9, 0.13)", bgPos2: "78% 22%",
         saroarQuery: "ফিল্টার কীভাবে কাজ করে?",
         saroarResult: "ফিল্টার সঠিক ক্লায়েন্ট আলাদা করে",
         words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে"],
@@ -1329,8 +1319,8 @@
       {
         startSec: 4.15, endSec: 6.50,
         focusX: 545, focusY: 225, zoom: 1.05, barGroup: 1,
-        bgColor1: "rgba(59, 59, 59, 0.40)", bgPos1: "52% 36%",
-        bgColor2: "rgba(11, 11, 11, 0.56)", bgPos2: "50% 85%",
+        bgColor1: "rgba(245, 158, 11, 0.18)", bgPos1: "54% 48%",
+        bgColor2: "rgba(217, 119, 6, 0.14)", bgPos2: "22% 80%",
         saroarQuery: "উত্তর কীভাবে তৈরি হয়?",
         saroarResult: "এবং এআই এজেন্ট স্মার্ট উত্তর বানায়",
         words: ["এবং", "এআই", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়"],
@@ -1339,8 +1329,8 @@
       {
         startSec: 6.50, endSec: 8.00,
         focusX: 790, focusY: 215, zoom: 1.08, barGroup: 1,
-        bgColor1: "rgba(59, 59, 59, 0.38)", bgPos1: "56% 35%",
-        bgColor2: "rgba(11, 11, 11, 0.56)", bgPos2: "50% 85%",
+        bgColor1: "rgba(251, 191, 36, 0.16)", bgPos1: "50% 46%",
+        bgColor2: "rgba(180, 83, 9, 0.13)", bgPos2: "82% 18%",
         saroarQuery: "ডেটা কোথায় সেভ হয়?",
         saroarResult: "গুগল শিটে ডেটা সেভ হয়",
         words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়"],
@@ -1349,8 +1339,8 @@
       {
         startSec: 8.00, endSec: 11.00,
         focusX: 465, focusY: 210, zoom: 0.56, barGroup: 1,
-        bgColor1: "rgba(59, 59, 59, 0.40)", bgPos1: "50% 35%",
-        bgColor2: "rgba(11, 11, 11, 0.58)", bgPos2: "50% 85%",
+        bgColor1: "rgba(245, 158, 11, 0.17)", bgPos1: "52% 45%",
+        bgColor2: "rgba(217, 119, 6, 0.14)", bgPos2: "20% 82%",
         saroarQuery: "n8n ফ্লো স্ট্যাটাস কী?",
         saroarResult: "পুরো এন এইট এন ফ্লো একদম রেডি",
         words: ["পুরো", "এন", "এইট", "এন", "ফ্লো", "একদম", "রেডি"],
@@ -1360,21 +1350,14 @@
         isIntroScene: true,
         startSec: 11.00, endSec: 12.50,
         focusX: 465, focusY: 210, zoom: 0.56, barGroup: 2,
-        bgColor1: "rgba(59, 59, 59, 0.42)", bgPos1: "50% 36%",
-        bgColor2: "rgba(11, 11, 11, 0.58)", bgPos2: "50% 85%",
+        bgColor1: "rgba(250, 204, 21, 0.18)", bgPos1: "50% 46%",
+        bgColor2: "rgba(217, 119, 6, 0.14)", bgPos2: "80% 20%",
         saroarQuery: "ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন",
         saroarResult: "পেজটি ফলো দিয়ে সঙ্গে থাকুন!",
         words: ["পেজটি", "ফলো", "দিয়ে", "সঙ্গে", "থাকুন"],
         weights: [0.20, 0.18, 0.18, 0.20, 0.24]
       }
     ];
-
-    function updateDigitalClock(fileSec, voiceSec, stepIndex, sceneElapsedSec, sceneSpanSec) {
-      clockSceneLabel.textContent = `সিন-${toBnNum(stepIndex)}:`;
-      clockSceneTime.textContent = `${fmtSec(sceneElapsedSec)}/${fmtSec(sceneSpanSec)}`;
-      clockVoiceTime.textContent = `ভয়েস ${fmtSec(voiceSec)}`;
-      clockFileTime.textContent = `ফাইল ${fmtSec(fileSec)}`;
-    }
 
     function getCurrentFileTime(dtSec) {
       if (!voiceAudio.paused && !voiceAudio.ended && Number.isFinite(voiceAudio.currentTime)) {
@@ -1514,9 +1497,9 @@
 
     function applySceneBackground(stepObj) {
       sceneAmbientBg.style.background = `
-        radial-gradient(ellipse at ${stepObj.bgPos1}, ${stepObj.bgColor1}, transparent 58%),
-        radial-gradient(circle at 50% 50%, transparent 44%, var(--wood-groove-soft) 92%, var(--wood-groove-dark) 100%),
-        linear-gradient(180deg, rgba(11, 11, 11, 0.42) 0%, rgba(51, 51, 51, 0.14) 45%, rgba(11, 11, 11, 0.52) 100%)
+        radial-gradient(circle at ${stepObj.bgPos1}, ${stepObj.bgColor1}, transparent 48%),
+        radial-gradient(circle at ${stepObj.bgPos2}, ${stepObj.bgColor2}, transparent 54%),
+        transparent
       `;
     }
 
@@ -1584,7 +1567,7 @@
         const len = path.getTotalLength();
         wiresData.push({ path, len, step: spec.step, sub: spec.sub });
 
-        const colors = spec.sub ? ["#c084fc"] : ["#22c55e", "#40C9FF"];
+        const colors = spec.sub ? ["#fbbf24"] : ["#22c55e", "#facc15"];
         colors.forEach((col, cIdx) => {
           const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           dot.setAttribute("class", "wire-pulse");
@@ -1752,14 +1735,6 @@
           setStep(resolved.stepIndex);
         }
 
-        updateDigitalClock(
-          currentFileSec,
-          resolved.voiceSec,
-          resolved.stepIndex,
-          resolved.sceneElapsedSec,
-          resolved.sceneSpanSec
-        );
-
         const stepObj = sceneConfigs[currentStep];
         syncVisualsToProgress(
           stepObj,
@@ -1812,13 +1787,6 @@
       const currentFileSec = (voiceAudio.currentTime || 0) % TOTAL_CYCLE_SEC;
       const resolved = resolveStepFromFileTime(currentFileSec);
       setStep(resolved.stepIndex);
-      updateDigitalClock(
-        currentFileSec,
-        resolved.voiceSec,
-        resolved.stepIndex,
-        resolved.sceneElapsedSec,
-        resolved.sceneSpanSec
-      );
     });
 
     voiceAudio.addEventListener("seeked", () => {
@@ -1828,13 +1796,6 @@
       const currentFileSec = (voiceAudio.currentTime || 0) % TOTAL_CYCLE_SEC;
       const resolved = resolveStepFromFileTime(currentFileSec);
       setStep(resolved.stepIndex);
-      updateDigitalClock(
-        currentFileSec,
-        resolved.voiceSec,
-        resolved.stepIndex,
-        resolved.sceneElapsedSec,
-        resolved.sceneSpanSec
-      );
       syncVisualsToProgress(
         sceneConfigs[currentStep],
         resolved.stepProgress,
@@ -1847,8 +1808,6 @@
 
     initSvgWires();
     setStep(0);
-    const initRes = resolveStepFromFileTime(0);
-    updateDigitalClock(0, initRes.voiceSec, 0, initRes.sceneElapsedSec, initRes.sceneSpanSec);
     requestAnimationFrame(animate);
   </script>
 </body>
