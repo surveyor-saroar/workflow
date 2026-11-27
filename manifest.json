@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Volume 10% Controller",
+  "version": "1.0",
+  "description": "Set media volume to 10% on the active tab.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
