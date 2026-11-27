@@ -44,7 +44,7 @@
         radial-gradient(circle at var(--glow1-pos), var(--glow1-color), transparent 46%),
         radial-gradient(circle at var(--glow2-pos), var(--glow2-color), transparent 50%),
         #111318;
-      transition: background 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: background 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     /* n8n-স্টাইল সূক্ষ্ম ডটেড ক্যানভাস ব্যাকগ্রাউন্ড + কেন্দ্র থেকে হালকা জুম-আনজুম */
@@ -134,7 +134,7 @@
       flex-shrink: 0;
       transform-origin: center center;
       transform: translate(0px, 0px) scale(0.45);
-      transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: transform;
     }
 
@@ -658,12 +658,12 @@
       document.getElementById("sub-1")
     ];
 
-    /* প্রতিটি সিনের মাঝামাঝিতে মাত্র একবার whoosh sound */
+    /* সিন পরিবর্তনের (ট্রানজিশনের) সময় whoosh sound */
     const whooshAudio = new Audio("whoosh.mp3.wav");
     whooshAudio.preload = "auto";
-    whooshAudio.volume = 0.72;
+    whooshAudio.volume = 0.75;
     let audioUnlocked = false;
-    let midWhooshPlayed = false;
+    let hasInitialRendered = false;
 
     function unlockSoundSystem() {
       if (audioUnlocked) return;
@@ -674,13 +674,12 @@
       }).catch(() => {});
     }
 
-    function playMidSceneWhoosh() {
-      if (isPaused || !audioUnlocked || midWhooshPlayed) return;
-      midWhooshPlayed = true;
+    function playTransitionSound() {
+      if (isPaused || !audioUnlocked) return;
       try {
         whooshAudio.pause();
         whooshAudio.currentTime = 0;
-        whooshAudio.volume = 0.72;
+        whooshAudio.volume = 0.75;
         whooshAudio.playbackRate = 1.0;
         const p = whooshAudio.play();
         if (p && typeof p.catch === "function") {
@@ -689,13 +688,13 @@
       } catch (_) {}
     }
 
-    /* প্রতিটি সিনে কন্টিনিউয়াস ব্যাকগ্রাউন্ড কালার ও মাঝামাঝির দিকে ব্যালেন্সড গ্লো */
+    /* প্রতিটি সিন ঠিক ৩ সেকেন্ড (3000ms) পর পর পরিবর্তন হবে */
     const steps = [
       {
         focusX: 115,
         focusY: 165,
         zoom: 1.18,
-        duration: 8600,
+        duration: 3000,
         bgColor1: "rgba(251, 146, 60, 0.17)",
         bgPos1: "28% 28%",
         bgColor2: "rgba(64, 201, 255, 0.16)",
@@ -706,7 +705,7 @@
         focusX: 295,
         focusY: 165,
         zoom: 1.18,
-        duration: 8600,
+        duration: 3000,
         bgColor1: "rgba(56, 189, 248, 0.18)",
         bgPos1: "35% 32%",
         bgColor2: "rgba(129, 140, 248, 0.16)",
@@ -717,7 +716,7 @@
         focusX: 545,
         focusY: 225,
         zoom: 1.05,
-        duration: 9000,
+        duration: 3000,
         bgColor1: "rgba(192, 132, 252, 0.19)",
         bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)",
@@ -728,7 +727,7 @@
         focusX: 790,
         focusY: 215,
         zoom: 1.08,
-        duration: 8800,
+        duration: 3000,
         bgColor1: "rgba(74, 222, 128, 0.18)",
         bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)",
@@ -739,7 +738,7 @@
         focusX: 465,
         focusY: 210,
         zoom: 0.56,
-        duration: 9200,
+        duration: 3000,
         bgColor1: "rgba(64, 201, 255, 0.17)",
         bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)",
@@ -806,7 +805,7 @@
             wireIdx: idx,
             el: dot,
             t: cIdx * 0.5,
-            speed: spec.sub ? 0.006 : 0.0055
+            speed: spec.sub ? 0.007 : 0.0065
           });
         });
       });
@@ -837,9 +836,14 @@
 
     function setStep(idx) {
       currentStep = idx;
-      midWhooshPlayed = false;
       const stepObj = steps[currentStep];
       const activeNodeIdx = Math.min(currentStep, mainNodes.length - 1);
+
+      if (hasInitialRendered) {
+        playTransitionSound();
+      } else {
+        hasInitialRendered = true;
+      }
 
       applySceneBackground(stepObj);
 
@@ -887,10 +891,6 @@
         elapsed += dt;
         const stepObj = steps[currentStep];
 
-        if (elapsed >= stepObj.duration * 0.5 && !midWhooshPlayed) {
-          playMidSceneWhoosh();
-        }
-
         if (elapsed >= stepObj.duration) {
           elapsed = 0;
           setStep((currentStep + 1) % steps.length);
@@ -928,6 +928,8 @@
       pausePill.classList.toggle("visible", isPaused);
       if (isPaused) {
         whooshAudio.pause();
+      } else {
+        playTransitionSound();
       }
     }
 
