@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • +0.25s Slower Animation Sync</title>
+  <title>n8n Style Workflow Reel • 0.5s Slower Sync + 7% music1</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -914,6 +914,7 @@
 </head>
 <body>
   <audio id="voiceAudio" src="Voice.aac" preload="auto"></audio>
+  <audio id="bgMusic" src="music1.mp3" loop preload="auto"></audio>
 
   <div class="scene-ambient-bg" id="sceneAmbientBg"></div>
   <div class="n8n-dots-bg"></div>
@@ -1161,13 +1162,20 @@
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
 
-    // আগের 0.12s এর সাথে আরও 0.25s যোগ করে মোট 0.37s স্লো/পিছিয়ে ধরা হয়েছে
-    const ANIM_LAG_OFFSET_SEC = 0.37;
+    // সিনগুলো ভয়েস থেকে 0.50s স্লো/পিছিয়ে সিঙ্ক করা হয়েছে
+    const ANIM_LAG_OFFSET_SEC = 0.50;
+
+    // ব্যাকগ্রাউন্ড সাউন্ডের ভলিউম 7% (0.07)
+    const BG_MUSIC_VOLUME = 0.07;
 
     const voiceAudio = document.getElementById("voiceAudio");
     voiceAudio.volume = 1.0;
     voiceAudio.playbackRate = 1.0;
     voiceAudio.loop = true;
+
+    const bgMusic = document.getElementById("bgMusic");
+    bgMusic.volume = BG_MUSIC_VOLUME;
+    bgMusic.loop = true;
 
     const viewport = document.getElementById("cameraViewport");
     const canvas = document.getElementById("n8nCanvas");
@@ -1323,7 +1331,7 @@
       };
     }
 
-    function unlockAndPlayVoice(resetToZero = false) {
+    function unlockAndPlayAudio(resetToZero = false) {
       if (!audioCtx) {
         const AC = window.AudioContext || window.webkitAudioContext;
         if (AC) audioCtx = new AC();
@@ -1343,10 +1351,15 @@
           voiceAudio.playbackRate = 1.0;
           if (resetToZero) {
             voiceAudio.currentTime = 0;
+            bgMusic.currentTime = 0;
             fallbackAudioSec = 0;
           }
-          const p = voiceAudio.play();
-          if (p && typeof p.catch === "function") p.catch(() => {});
+          const pVoice = voiceAudio.play();
+          if (pVoice && typeof pVoice.catch === "function") pVoice.catch(() => {});
+
+          bgMusic.volume = BG_MUSIC_VOLUME;
+          const pBg = bgMusic.play();
+          if (pBg && typeof pBg.catch === "function") pBg.catch(() => {});
         } catch (_) {}
       }
     }
@@ -1662,8 +1675,9 @@
       if (isPaused) {
         whooshAudio.pause();
         voiceAudio.pause();
+        bgMusic.pause();
       } else {
-        unlockAndPlayVoice(!audioUnlocked);
+        unlockAndPlayAudio(!audioUnlocked);
         playTransitionSound();
       }
     }
