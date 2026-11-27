@@ -199,26 +199,49 @@
       background: rgba(18, 21, 29, 0.94);
       border: 1px solid rgba(250, 204, 21, 0.45);
       border-radius: 12px;
-      padding: 8px 12px;
+      padding: 7px 11px;
       box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
     }
 
+    /* বাম পাশে ছোট সার্কেল ছবির ফ্রেম */
+    .saroar-avatar-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+      background: #1e2433;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .saroar-avatar-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* saroar লেখার রঙ সাদা (#ffffff) */
     .saroar-badge {
       font-size: 11.5px;
       font-weight: 900;
       letter-spacing: 0.04em;
-      color: #090d16;
-      background: linear-gradient(90deg, #facc15, #40C9FF);
-      padding: 2px 9px;
+      color: #ffffff;
+      background: linear-gradient(90deg, #2563eb, #0ea5e9);
+      padding: 3px 9px;
       border-radius: 6px;
       flex-shrink: 0;
-      box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.35);
       animation: saroarBadgePulse 2.2s ease-in-out infinite;
     }
 
     @keyframes saroarBadgePulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
+      50% { transform: scale(1.05); }
     }
 
     .saroar-typing-text {
@@ -487,7 +510,6 @@
       height: 22px;
     }
 
-    /* নতুন আপডেটেড আইকনগুলোর কন্টিনিউয়াস অ্যানিমেশন */
     .ic-orange svg {
       animation: iconBoltBounce 2.2s ease-in-out infinite;
     }
@@ -741,9 +763,12 @@
         <span>n8n AI <span class="title-highlight-words">Lead Automation</span></span>
       </div>
 
-      <!-- saroar ব্যাজসহ সার্চ বক্স, টাইপিং কার্সর ও রেজাল্ট পপ-আপ -->
+      <!-- বাম পাশে ছোট সার্কেল ছবি + সাদা কালারের saroar ব্যাজসহ সার্চ বক্স -->
       <div class="saroar-widget">
         <div class="saroar-search-bar">
+          <div class="saroar-avatar-circle">
+            <img id="saroarCirclePhoto" src="saroar01.png" alt="Saroar" onerror="this.style.display='none';" />
+          </div>
           <span class="saroar-badge">saroar</span>
           <div class="saroar-typing-text">
             <span id="saroarQueryText"></span><span class="typing-cursor"></span>
@@ -769,7 +794,7 @@
           <g id="pulsesLayer"></g>
         </svg>
 
-        <!-- নোড ১: আপডেটেড Webhook Bolt আইকন -->
+        <!-- নোড ১ -->
         <div class="n8n-node active" id="node-0" style="left: 36px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -786,7 +811,7 @@
           </div>
         </div>
 
-        <!-- নোড ২: আপডেটেড Filter Sliders আইকন -->
+        <!-- নোড ২ -->
         <div class="n8n-node" id="node-1" style="left: 230px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -806,7 +831,7 @@
           </div>
         </div>
 
-        <!-- নোড ৩: আপডেটেড AI Agent Brain/Spark আইকন -->
+        <!-- নোড ৩: AI Agent -->
         <div class="n8n-node agent-node" id="node-2" style="left: 430px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -831,7 +856,7 @@
           </div>
         </div>
 
-        <!-- সাব-নোড ৩ক: আপডেটেড Chat Model আইকন -->
+        <!-- সাব-নোড ৩ক -->
         <div class="n8n-node sub-node" id="sub-0" style="left: 446px; top: 285px;">
           <div class="node-box">
             <div class="port top"></div>
@@ -849,7 +874,7 @@
           </div>
         </div>
 
-        <!-- সাব-নোড ৩খ: আপডেটেড Memory Chip আইকন -->
+        <!-- সাব-নোড ৩খ -->
         <div class="n8n-node sub-node" id="sub-1" style="left: 568px; top: 285px;">
           <div class="node-box">
             <div class="port top"></div>
@@ -865,7 +890,7 @@
           </div>
         </div>
 
-        <!-- নোড ৪: আপডেটেড Google Sheets Table আইকন -->
+        <!-- নোড ৪: Google Sheets -->
         <div class="n8n-node" id="node-3" style="left: 715px; top: 96px;">
           <div class="node-box">
             <div class="node-check">✓</div>
@@ -911,6 +936,10 @@
   </div>
 
   <script>
+    const SAROAR_CIRCLE_PHOTO_URL = "saroar01.png";
+    const saroarCirclePhoto = document.getElementById("saroarCirclePhoto");
+    saroarCirclePhoto.src = SAROAR_CIRCLE_PHOTO_URL;
+
     const viewport = document.getElementById("cameraViewport");
     const canvas = document.getElementById("n8nCanvas");
     const sceneAmbientBg = document.getElementById("sceneAmbientBg");
@@ -935,7 +964,6 @@
       document.getElementById("sub-1")
     ];
 
-    /* সিন পরিবর্তনের (ট্রানজিশনের) সময় whoosh sound */
     const whooshAudio = new Audio("whoosh.mp3.wav");
     whooshAudio.preload = "auto";
     whooshAudio.volume = 0.75;
@@ -965,7 +993,6 @@
       } catch (_) {}
     }
 
-    /* প্রতিটি সিন ৩ সেকেন্ড (3000ms) + saroar টাইপিং ও রেজাল্ট পপ-আপ ডেটা */
     const steps = [
       {
         focusX: 115,
@@ -1132,14 +1159,12 @@
         hasInitialRendered = true;
       }
 
-      /* ২ সিন পর পর টাইটেলটি স্ক্রিনে দেখানো (সিন ০, ২, ৪) ও হাইলাইট অ্যানিমেশন রিস্টার্ট */
       topTitlePill.classList.remove("show-title");
       if (currentStep % 2 === 0) {
         void topTitlePill.offsetWidth;
         topTitlePill.classList.add("show-title");
       }
 
-      /* saroar সার্চ বক্স রিসেট ও রেজাল্ট পপ-আপ প্রস্তুত */
       saroarQueryText.textContent = "";
       saroarResultText.textContent = stepObj.saroarResult;
       saroarResultPopup.classList.remove("visible");
@@ -1196,17 +1221,14 @@
         } else {
           const progress = elapsed / stepObj.duration;
 
-          /* saroar সার্চ বক্সে টাইপিং অ্যানিমেশন (প্রথম ৪০% সময়ে টাইপ শেষ হবে) */
           const typingProgress = Math.min(1, progress / 0.4);
           const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
           saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
 
-          /* টাইপিং শেষ হলেই রেজাল্ট পপ-আপ প্রদর্শন */
           if (progress >= 0.42) {
             saroarResultPopup.classList.add("visible");
           }
 
-          /* মূল শব্দের পেছনে হলুদ হাইলাইট বার অ্যাকসেন্ট */
           const activeWord = Math.min(
             wordEls.length - 1,
             Math.floor(progress * wordEls.length)
