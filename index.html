@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>n8n Style Workflow Reel • 2.5s Per Scene & Facebook Follow</title>
+  <title>n8n Style Workflow Reel • Voice & Highlight Synced</title>
   <style>
     :root {
       --glow1-color: rgba(64, 201, 255, 0.16);
@@ -40,7 +40,8 @@
     body.is-paused .icon-wrap svg,
     body.is-paused .s6-mouse-cursor,
     body.is-paused .s6-ripple,
-    body.is-paused .fb-icon-circle {
+    body.is-paused .fb-icon-circle,
+    body.is-paused .s6-right-fb-circle {
       animation-play-state: paused !important;
     }
 
@@ -337,7 +338,7 @@
       opacity: 1;
       transform-origin: center center;
       transform: translate(0px, 0px) scale(0.45);
-      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
       will-change: transform;
     }
 
@@ -574,7 +575,6 @@
     .sheet-card th { background: rgba(34, 197, 94, 0.15); color: #4ade80; font-weight: 800; }
     .sheet-card tr.flash-row { background: rgba(34, 197, 94, 0.22); color: #dcfce7; font-weight: 700; }
 
-    /* সিন ৬: ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন + বাম পাশে ফেসবুক আইকন + রিং বেল + শেয়ার করুন */
     .scene6-intro-stage {
       position: absolute;
       inset: 0;
@@ -589,7 +589,7 @@
 
     .scene6-intro-stage.active {
       display: flex;
-      animation: s6FadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: s6FadeIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     @keyframes s6FadeIn {
@@ -597,16 +597,39 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    .s6-intro-heading {
-      background: rgba(24, 28, 38, 0.94);
+    .s6-intro-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: rgba(24, 28, 38, 0.95);
       border: 1px solid rgba(56, 189, 248, 0.55);
       color: #facc15;
       font-size: 13px;
       font-weight: 900;
-      padding: 6px 15px;
+      padding: 6px 8px 6px 14px;
       border-radius: 999px;
       letter-spacing: 0.02em;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .s6-right-fb-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1877f2, #0ea5e9);
+      border: 1.5px solid #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(24, 119, 242, 0.55);
+      animation: fbPulse 1.8s ease-in-out infinite;
+    }
+
+    .s6-right-fb-circle svg {
+      width: 14px;
+      height: 14px;
+      fill: #ffffff;
     }
 
     .s6-cards-row {
@@ -635,7 +658,6 @@
       transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
     }
 
-    /* বাম পাশে ফেসবুক আইকন সার্কেল */
     .fb-icon-circle {
       width: 62px;
       height: 62px;
@@ -733,7 +755,6 @@
       font-weight: 800;
     }
 
-    /* ২.৫ সেকেন্ডের মধ্যে মাউস এসে রিং বেলে ক্লিক ও শেয়ারে ক্লিক করে চলে যাওয়া */
     .s6-mouse-cursor {
       position: absolute;
       left: 50%;
@@ -747,18 +768,18 @@
     }
 
     .scene6-intro-stage.active .s6-mouse-cursor {
-      animation: s6MouseSequence2500 2.35s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
+      animation: s6MouseSequenceSynced 2.1s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
     }
 
-    @keyframes s6MouseSequence2500 {
+    @keyframes s6MouseSequenceSynced {
       0% { opacity: 0; transform: translate3d(-240px, 8px, 0) scale(1); }
-      16% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
-      22% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(0.8); }
-      28% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
-      52% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
-      58% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(0.8); }
-      64% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
-      85% { opacity: 0.7; transform: translate3d(220px, -28px, 0) scale(0.92); }
+      15% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
+      21% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(0.8); }
+      27% { opacity: 1; transform: translate3d(0px, 0px, 0) scale(1); }
+      50% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
+      56% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(0.8); }
+      62% { opacity: 1; transform: translate3d(125px, 0px, 0) scale(1); }
+      84% { opacity: 0.7; transform: translate3d(220px, -28px, 0) scale(0.92); }
       100% { opacity: 0; transform: translate3d(265px, -45px, 0) scale(0.85); }
     }
 
@@ -892,6 +913,8 @@
   </style>
 </head>
 <body>
+  <audio id="voiceAudio" src="Voice.aac" preload="auto"></audio>
+
   <div class="scene-ambient-bg" id="sceneAmbientBg"></div>
   <div class="n8n-dots-bg"></div>
   <div class="pause-pill" id="pausePill">PAUSED • ট্যাপ করে চালান</div>
@@ -1068,11 +1091,18 @@
         </div>
       </div>
 
-      <!-- সিন ৬: ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন + বাম পাশে ফেসবুক আইকন -->
+      <!-- সিন ৬: ডান পাশে ছোট সার্কেলে ফেসবুক লোগো + ৩টি কার্ড -->
       <div class="scene6-intro-stage" id="scene6IntroStage">
-        <div class="s6-intro-heading">ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন</div>
+        <div class="s6-intro-banner">
+          <span>ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন</span>
+          <span class="s6-right-fb-circle" aria-label="Facebook">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+            </svg>
+          </span>
+        </div>
+
         <div class="s6-cards-row">
-          <!-- কার্ড ১: বাম পাশে ফেসবুক আইকন -->
           <div class="s6-card">
             <div class="fb-icon-circle" aria-label="Facebook">
               <svg viewBox="0 0 24 24">
@@ -1083,7 +1113,6 @@
             <div class="s6-profile-role">দিয়ে সংঙ্গে থাকুন</div>
           </div>
 
-          <!-- কার্ড ২: মধ্যখানে রিং বেল (ক্লিক হলে ফলো বাটন আসে) -->
           <div class="s6-card" id="s6BellCard">
             <div class="s6-ripple bell-r" id="s6BellRipple"></div>
             <div class="s6-bell-view" id="s6BellView">
@@ -1102,7 +1131,6 @@
             </div>
           </div>
 
-          <!-- কার্ড ৩: তৃতীয়তে শেয়ার করুন কার্ড -->
           <div class="s6-card" id="s6ShareCard">
             <div class="s6-ripple share-r" id="s6ShareRipple"></div>
             <div class="icon-wrap ic-cyan" style="width:46px;height:46px;border-radius:50%;">
@@ -1118,7 +1146,6 @@
             <div class="s6-card-sub" id="s6ShareSub">বন্ধুদের পাঠান</div>
           </div>
 
-          <!-- বাম পাশ থেকে আসা মাউস কার্সর -->
           <svg class="s6-mouse-cursor" id="s6MouseCursor" viewBox="0 0 36 36" fill="none">
             <path d="M9 5L9 27L15.2 21.4L19.8 31L24.2 28.9L19.6 19.4L27.5 19.4L9 5Z" fill="#ffffff" stroke="#090d16" stroke-width="2" stroke-linejoin="round"/>
           </svg>
@@ -1134,6 +1161,9 @@
   <script>
     const SAROAR_PHOTO_URL = "saroar01.png";
     document.getElementById("saroarCirclePhoto").src = SAROAR_PHOTO_URL;
+
+    const voiceAudio = document.getElementById("voiceAudio");
+    voiceAudio.volume = 1.0;
 
     const viewport = document.getElementById("cameraViewport");
     const canvas = document.getElementById("n8nCanvas");
@@ -1168,13 +1198,13 @@
 
     const whooshAudio = new Audio("whoosh.mp3.wav");
     whooshAudio.preload = "auto";
-    whooshAudio.volume = 0.75;
+    whooshAudio.volume = 0.55;
 
     let audioUnlocked = false;
     let audioCtx = null;
     let hasInitialRendered = false;
 
-    function unlockSoundSystem() {
+    function unlockAndPlayVoice(fromStepStart = false) {
       if (!audioCtx) {
         const AC = window.AudioContext || window.webkitAudioContext;
         if (AC) audioCtx = new AC();
@@ -1189,6 +1219,18 @@
           whooshAudio.currentTime = 0;
         }).catch(() => {});
       }
+      if (!isPaused) {
+        try {
+          if (fromStepStart && steps[currentStep]) {
+            const targetSec = steps[currentStep].voiceStartSec;
+            if (typeof targetSec === "number" && Number.isFinite(targetSec)) {
+              voiceAudio.currentTime = targetSec;
+            }
+          }
+          const p = voiceAudio.play();
+          if (p && typeof p.catch === "function") p.catch(() => {});
+        } catch (_) {}
+      }
     }
 
     function playTransitionSound() {
@@ -1196,7 +1238,7 @@
       try {
         whooshAudio.pause();
         whooshAudio.currentTime = 0;
-        whooshAudio.volume = 0.75;
+        whooshAudio.volume = 0.55;
         whooshAudio.playbackRate = 1.0;
         const p = whooshAudio.play();
         if (p && typeof p.catch === "function") {
@@ -1223,7 +1265,7 @@
       osc.frequency.exponentialRampToValueAtTime(280, now + 0.085);
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.18, now + 0.012);
+      gain.gain.linearRampToValueAtTime(0.16, now + 0.012);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.095);
 
       osc.connect(gain);
@@ -1232,58 +1274,81 @@
       osc.stop(now + 0.1);
     }
 
-    /* প্রতি সিনে ২.৫ সেকেন্ড (2500ms) */
+    /* Voice.aac এর সাথে সিন টাইমিং ও প্রতি শব্দের হাইলাইট ওয়েট */
     const steps = [
       {
-        focusX: 115, focusY: 165, zoom: 1.18, duration: 2500, barGroup: 0,
+        voiceStartSec: 0.0,
+        focusX: 115, focusY: 165, zoom: 1.18, duration: 2050, barGroup: 0,
         bgColor1: "rgba(251, 146, 60, 0.17)", bgPos1: "28% 28%",
         bgColor2: "rgba(64, 201, 255, 0.16)", bgPos2: "64% 56%",
-        saroarQuery: "লিড ফর্ম সাবমিট হলে কী হবে?",
-        saroarResult: "Webhook সাথে সাথে ওয়ার্কফ্লো ট্রিগার করবে",
-        words: ["ফর্ম", "আসলেই", "অটোমেশন", "শুরু", "হয়।"]
+        saroarQuery: "ফর্ম সাবমিট হলে কী হবে?",
+        saroarResult: "ফর্ম সাবমিট করলেই অটোমেশন শুরু",
+        words: ["ফর্ম", "সাবমিট", "করলেই", "অটোমেশন", "শুরু"],
+        weights: [0.16, 0.20, 0.22, 0.24, 0.18]
       },
       {
-        focusX: 295, focusY: 165, zoom: 1.18, duration: 2500, barGroup: 0,
+        voiceStartSec: 2.05,
+        focusX: 295, focusY: 165, zoom: 1.18, duration: 1950, barGroup: 0,
         bgColor1: "rgba(56, 189, 248, 0.18)", bgPos1: "35% 32%",
         bgColor2: "rgba(129, 140, 248, 0.16)", bgPos2: "65% 58%",
-        saroarQuery: "কীভাবে সঠিক ক্লায়েন্ট বাছাই হবে?",
-        saroarResult: "Intent Filter আসল লিড আলাদা করবে",
-        words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে।"]
+        saroarQuery: "ফিল্টার কীভাবে কাজ করে?",
+        saroarResult: "ফিল্টার সঠিক ক্লায়েন্ট আলাদা করে",
+        words: ["ফিল্টার", "সঠিক", "ক্লায়েন্ট", "আলাদা", "করে"],
+        weights: [0.20, 0.18, 0.24, 0.22, 0.16]
       },
       {
-        focusX: 545, focusY: 225, zoom: 1.05, duration: 2500, barGroup: 1,
+        voiceStartSec: 4.0,
+        focusX: 545, focusY: 225, zoom: 1.05, duration: 2100, barGroup: 1,
         bgColor1: "rgba(192, 132, 252, 0.19)", bgPos1: "42% 35%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "62% 55%",
-        saroarQuery: "ক্লায়েন্টকে উত্তর দেবে কে?",
-        saroarResult: "AI Agent + Memory স্মার্ট রিপ্লাই তৈরি করবে",
-        words: ["AI", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়।"]
+        saroarQuery: "উত্তর কীভাবে তৈরি হয়?",
+        saroarResult: "এবং এআই এজেন্ট স্মার্ট উত্তর বানায়",
+        words: ["এবং", "এআই", "এজেন্ট", "স্মার্ট", "উত্তর", "বানায়"],
+        weights: [0.13, 0.15, 0.19, 0.17, 0.17, 0.19]
       },
       {
-        focusX: 790, focusY: 215, zoom: 1.08, duration: 2500, barGroup: 1,
+        voiceStartSec: 6.1,
+        focusX: 790, focusY: 215, zoom: 1.08, duration: 1750, barGroup: 1,
         bgColor1: "rgba(74, 222, 128, 0.18)", bgPos1: "38% 34%",
         bgColor2: "rgba(64, 201, 255, 0.15)", bgPos2: "66% 56%",
-        saroarQuery: "লিডের তথ্য কোথায় জমা থাকবে?",
-        saroarResult: "Google Sheets-এ অটোমেটিক নতুন রো যুক্ত হবে",
-        words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়।"]
+        saroarQuery: "ডেটা কোথায় সেভ হয়?",
+        saroarResult: "গুগল শিটে ডেটা সেভ হয়",
+        words: ["গুগল", "শিটে", "ডেটা", "সেভ", "হয়"],
+        weights: [0.20, 0.20, 0.20, 0.22, 0.18]
       },
       {
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 2500, barGroup: 1,
+        voiceStartSec: 7.85,
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 1950, barGroup: 1,
         bgColor1: "rgba(64, 201, 255, 0.17)", bgPos1: "32% 30%",
         bgColor2: "rgba(232, 28, 255, 0.17)", bgPos2: "66% 56%",
-        saroarQuery: "n8n AI Lead Automation স্ট্যাটাস?",
-        saroarResult: "১০০% অটোমেটেড লিড ফ্লো এখন সক্রিয়!",
-        words: ["পুরো", "n8n", "ফ্লো", "একদম", "রেডি!"]
+        saroarQuery: "n8n ফ্লো স্ট্যাটাস কী?",
+        saroarResult: "পুরো এন এইট এন ফ্লো একদম রেডি",
+        words: ["পুরো", "এন", "এইট", "এন", "ফ্লো", "একদম", "রেডি"],
+        weights: [0.14, 0.12, 0.13, 0.12, 0.15, 0.17, 0.17]
       },
       {
+        voiceStartSec: 9.8,
         isIntroScene: true,
-        focusX: 465, focusY: 210, zoom: 0.56, duration: 2500, barGroup: 2,
+        focusX: 465, focusY: 210, zoom: 0.56, duration: 2200, barGroup: 2,
         bgColor1: "rgba(24, 119, 242, 0.22)", bgPos1: "25% 30%",
         bgColor2: "rgba(250, 204, 21, 0.18)", bgPos2: "72% 60%",
         saroarQuery: "ফেইজটি ফলো দিয়ে সংঙ্গে থাকুন",
-        saroarResult: "ফলো করুন ও বন্ধুদের সাথে শেয়ার করুন!",
-        words: ["ফেইজটি", "ফলো", "দিয়ে", "সংঙ্গে", "থাকুন!"]
+        saroarResult: "পেজটি ফলো দিয়ে সঙ্গে থাকুন!",
+        words: ["পেজটি", "ফলো", "দিয়ে", "সঙ্গে", "থাকুন"],
+        weights: [0.20, 0.18, 0.18, 0.20, 0.24]
       }
     ];
+
+    function getWeightedWordIndex(progress, weights) {
+      if (!weights || !weights.length) return 0;
+      const total = weights.reduce((a, b) => a + b, 0);
+      let acc = 0;
+      for (let i = 0; i < weights.length; i++) {
+        acc += weights[i] / total;
+        if (progress <= acc) return i;
+      }
+      return weights.length - 1;
+    }
 
     function applySceneBackground(stepObj) {
       sceneAmbientBg.style.background = `
@@ -1370,7 +1435,7 @@
             wireIdx: idx,
             el: dot,
             t: cIdx * 0.5,
-            speed: spec.sub ? 0.0085 : 0.008
+            speed: spec.sub ? 0.0095 : 0.009
           });
         });
       });
@@ -1408,6 +1473,12 @@
 
       if (hasInitialRendered) {
         playTransitionSound();
+        if (audioUnlocked && !isPaused && typeof stepObj.voiceStartSec === "number") {
+          try {
+            voiceAudio.currentTime = stepObj.voiceStartSec;
+            voiceAudio.play().catch(() => {});
+          } catch (_) {}
+        }
       } else {
         hasInitialRendered = true;
       }
@@ -1486,23 +1557,23 @@
         } else {
           const progress = elapsed / stepObj.duration;
 
-          const typingProgress = Math.min(1, progress / 0.38);
+          const typingProgress = Math.min(1, progress / 0.36);
           const charCount = Math.floor(typingProgress * stepObj.saroarQuery.length);
           saroarQueryText.textContent = stepObj.saroarQuery.slice(0, charCount);
 
-          if (progress >= 0.4) {
+          if (progress >= 0.38) {
             saroarResultPopup.classList.add("visible");
           }
 
           if (stepObj.isIntroScene) {
-            if (!bellClickedOnce && elapsed >= 620) {
+            if (!bellClickedOnce && elapsed >= 520) {
               bellClickedOnce = true;
               playClickSound(820);
               document.getElementById("s6BellRipple").classList.add("fire");
               document.getElementById("s6BellView").classList.add("hide");
               document.getElementById("s6FollowBtn").classList.add("show");
             }
-            if (!shareClickedTwice && elapsed >= 1450) {
+            if (!shareClickedTwice && elapsed >= 1220) {
               shareClickedTwice = true;
               playClickSound(640);
               document.getElementById("s6ShareRipple").classList.add("fire");
@@ -1511,11 +1582,7 @@
             }
           }
 
-          const activeWord = Math.min(
-            wordEls.length - 1,
-            Math.floor(progress * wordEls.length)
-          );
-
+          const activeWord = getWeightedWordIndex(progress, stepObj.weights);
           wordEls.forEach((el, i) => {
             el.classList.toggle("active", i === activeWord);
           });
@@ -1537,14 +1604,16 @@
     }
 
     function togglePause() {
-      unlockSoundSystem();
       isPaused = !isPaused;
       lastTick = performance.now();
       document.body.classList.toggle("is-paused", isPaused);
       pausePill.classList.toggle("visible", isPaused);
+
       if (isPaused) {
         whooshAudio.pause();
+        voiceAudio.pause();
       } else {
+        unlockAndPlayVoice(true);
         playTransitionSound();
       }
     }
